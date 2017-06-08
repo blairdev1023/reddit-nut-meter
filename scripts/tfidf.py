@@ -4,6 +4,7 @@ from time import time
 from os import listdir
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import NMF
+import pickle
 
 def get_master_df():
     '''
@@ -39,7 +40,11 @@ def get_master_df():
 
 def get_tfidf_transform(master_df):
     '''
+    returns an nmf model and X numpy array. X is the tfidf matrix and nmf
+    is the sklearn nmf model that is fitted with X
 
+    master_df - pandas dataframe
+        should be your running main dataframe
     '''
     master_df['body'] = master_df['body'].astype(str)
     print('Vectorizing')
@@ -61,11 +66,38 @@ def get_tfidf_transform(master_df):
     nmf.fit(X)
     return nmf, X
 
+def append_topic_idx(master_df, nmf, X):
+    '''
+    Tranforms and fetches W from the nmf model using the training data in X.
+    Since W is comments vs. topics we find the index of the max index and
+    append that column to the master dataframe. Then the master dataframe
+    is returned.
+
+    master_df - pandas dataframe
+        should be your running master
+    nmf - sklearn nmf model
+        needs to be already fitted with the same data, X
+    X - pandas dataframe or numpy array
+        the same data the nmf was trained on, used for transforming
+    '''
+    now = round((time() - start)/60., 2)
+    print('Transforming X, now: %s Mins' % now)
+    W = nmf.transform(X)
+    now = round((time() - start)/60., 2)
+    print('Appending indicies, now: %s Mins' % now)
+    master_df['topic_idx'] = np.argmax(W, axis=1)
+    return master_df
+
 if __name__ == '__main__':
     start = time()
 
+    # master_df = pd.read_pickle('pickles/master_df.pkl')
+    # nmf, X = get_tfidf_transform(master_df)
+
     master_df = pd.read_pickle('pickles/master_df.pkl')
-    nmf, X = get_tfidf_transform(master_df)
+    nmf = pickle.load(open('pickles/nmf.pkl', 'rb'))
+    X = np.load(open('pickles/X.pkl', 'rb'))
+    master_df = append_topic_idx(master_df, nmf, X)
 
     end = time()
     print('This took %s minutes' % round((end - start)/60., 2))
