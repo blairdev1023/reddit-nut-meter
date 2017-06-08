@@ -1,0 +1,296 @@
+name,body,score,sub
+LucyIsaTumor,oh god no every time i hear this my morbid curiousity makes me read it again no no no o o o,2,creepy
+LucyIsaTumor,ah that awesome glad to help ,3,AskReddit
+LucyIsaTumor,came here to comment exactly this the beginner guide is my all time favorite if you are a book reader i highly suggest reading if on a winters night a traveler by italio calvino it may help you understand the weirdness of the game a bit more also this book can be found in game during that little chores game on the bookshelf ,22,AskReddit
+LucyIsaTumor,i love you ,1,photoshopbattles
+LucyIsaTumor,that awesome you might like r worldbuilding,1,AskReddit
+LucyIsaTumor,thanks botty,2,ProgrammerHumor
+LucyIsaTumor,aw that reminds me of this https vignette1 wikia nocookie net looneytunes images b be speechless tribute to mel blanc jpg revision latest cb 20140129185935 ,1,pics
+LucyIsaTumor,remindme 29 years,3,pics
+LucyIsaTumor,oh coolio glad to hear you got it back ,1,DarkHumor
+LucyIsaTumor,what the fuck nsfw heads up ,2,DarkHumor
+LucyIsaTumor,man this should be on r wholesomememes,0,videos
+LucyIsaTumor, and python,1,ProgrammerHumor
+LucyIsaTumor,an easy way to remember is alphabetically brackets comes before parenthesis ,2,Overwatch
+LucyIsaTumor,let me know if you find it i have been looking all around for that one ,1,dataisbeautiful
+LucyIsaTumor,love those bottles they would make for a pretty cool witch wizard setup where would you get them ,1,food
+LucyIsaTumor,yeah aging until almost teenager would be cool they would have their own lives still maybe they would randomly choose a bride too ,6,StardewValley
+LucyIsaTumor,you get my upvote for pointing out a logical fallacy ,5,gadgets
+LucyIsaTumor,aw damn i just posted this good eye ,2,MapsWithoutNZ
+LucyIsaTumor,ah good ol combinatorics,1,AskReddit
+LucyIsaTumor,i would like to invite you to r darkhumor ,2,Jokes
+LucyIsaTumor,absolutely love those translucent tubes had a corsair pump go out on me and could not tell until i had a bit of cpu throttling with insane peak temps i cannot wait to grab another liquid cooler for the next build i will probably go with an open loop like this next time for better monitoring ,2,battlestations
+LucyIsaTumor,that really depend on a number of factors i will just speak conceptually since i am not sure how you implemented your code your character is likely an object an object that was created from a class and has a number of attributes the most important attribute being its x and y location these locations you should already be using to blit the character on screen now let think we have the characters x location and we need to move the map depending on where the character is what i like to do and what is usually runtime friendly is just to do a test if the object is at the middle of the screen meaning the x location for the object is greater than or equal to half of my screens width so great the characters at the middle of the screen and we want the background to move well the background can be moved every frame by just adjusting the blit locations of that image say you start blitting your image at 0 0 and you now need to start shifting it to the left you will want to decrease the x variable in the blit location how can you do this well you can do this a few ways as well specifically i have used global variable let say map x and map y lastly let bring it all together my object is at the center of the screen you can call a function or use a boolean or an if check something changes if that object is at the center if it true then you want to decrease the x coordinate in which you draw image however you only want to do this while the user is pressing the right arrow key on their keyboard or whatever they press to move thus you will need a second check just to ensure that they are wanting to move the map repeat the same for the other direction and you my friend have a moving background ,2,pygame
+LucyIsaTumor,but sir i could not walk that line if i was sober wait ,2,space
+LucyIsaTumor,as a swedish man once said a poor craftsman blames his tools ,1,pics
+LucyIsaTumor,real original op anyone seeking more info might also check here title points age r comnts ffnnnnnnnn http www reddit com r funny comments 2xnkbi ffnnnnnnnn b 27 2 yrs funny 7 nice finger bro http www reddit com r funny comments 69l2c1 nice finger bro b 43 7 hrs funny 8 hmmm http www reddit com r funny comments 60v0bp hmmm b 3203 1 mo funny 61 hmmm http www reddit com r hmmm comments 60rszf hmmm b 3881 1 mo hmmm 71 having a little fun in the mall http www reddit com r funny comments 65enug having a little fun in the mall b 327 22 dys funny 33 source karmadecay http karmadecay com results u8895382 b bigger ,5,funny
+LucyIsaTumor, totally oc anyone seeking more info might also check here title points age r comnts sure you are goth but are you dejectedly riding the subway with your raven goth http www reddit com r funny comments 68ceyd sure youre goth but are you dejectedly riding the b 3642 6 dys funny 297 raven http www reddit com r aww comments 68eq06 raven b 6 dys aww quoth the raven next time uber http www reddit com r funny comments 68d7x6 quoth the raven next time uber b 6 6 dys funny 2 raven on the subway http www reddit com r birdstakingthetrain comments 68cug4 raven on the subway b 300 6 dys birdstakingthetrain 8 psbattle this girl on the subway with a raven http www reddit com r photoshopbattles comments 68cufr psbattle this girl on the subway with a raven b 37 6 dys photoshopbattles 7 she has a raven http www reddit com r goth comments 68c67y she has a raven b 256 6 dys goth 37 just a girl and her raven on the subway http www reddit com r pics comments 68bhl5 just a girl and her raven on the subway b 91827 6 dys pics 6046 psbattle a girl and her raven on the subway http www reddit com r photoshopbattles comments 68dfqr psbattle a girl and her raven on the subway b 2 6 dys photoshopbattles 2 sure you are goth but are you dejectedly riding the subway with your raven goth http www reddit com r pics comments 68blb3 sure youre goth but are you dejectedly riding the b 17 6 dys pics 9 psbattle goth girl with a bird http www reddit com r photoshopbattles comments 68f9k0 psbattle goth girl with a bird 1 6 dys photoshopbattles 3 this woman taking her pet raven on the subway http www reddit com r mildlyinteresting comments 68bthn this woman taking her pet raven on the subway 994 6 dys mildlyinteresting 133 source karmadecay http karmadecay com results u8895347 b bigger ,1,pics
+LucyIsaTumor,you found this on a thumb drive i found this in about 9 other places anyone seeking more info might also check here title points age r comnts found this on a thumb drive i found on the street http www reddit com r funny comments 69luur found this on a thumb drive i found on the street 5 4 hrs funny 4 daniel boringcliffe http www reddit com r funny comments 64glgw daniel boringcliffe b 918 26 dys funny 26 me irl http www reddit com r me irl comments 5a74g6 me irl b 1449 6 mos me irl 18 daniel radcliffe http www reddit com r punny comments 228tom daniel radcliffe b 403 3 yrs punny 3 daniel radcliffe http www reddit com r funny comments 1uxf7g daniel radcliffe b 1769 3 yrs funny 54 daniel radcliffe http www reddit com r punny comments 1kvbah daniel radcliffe b 1769 3 yrs punny 28 dammit daniel http www reddit com r funny comments 5jk5ts dammit daniel 18 4 mos funny 2 the cliffes http www reddit com r funny comments 2kfpim the cliffes b 25 2 yrs funny 5 daniel radcliffe http www reddit com r funny comments 1kbl03 daniel radcliffe b 411 3 yrs funny 12 source karmadecay http karmadecay com results u8895345 b bigger ,1,funny
+LucyIsaTumor,sorry no one interested in reposters anyone seeking more info might also check here title points age r comnts burn hungdaddy burn http www reddit com r funny comments 69joz3 burn hungdaddy burn 10 14 hrs funny 1 giggity http www reddit com r funny comments 69jhg0 giggity 80 15 hrs funny 1 why i love this show http www reddit com r southpark comments wzvqg why i love this show 788 4 yrs southpark 22 my favourite cartman moment http www reddit com r funny comments 2f1rr0 my favourite cartman moment 3009 2 yrs funny 92 no love for midgets http www reddit com r funny comments 27u2l8 no love for midgets 144 2 yrs funny 1 cartman http www reddit com r southpark comments 27rzt8 cartman 951 2 yrs southpark 30 my favorite scene in south park http www reddit com r funny comments 1xxzit my favorite scene in south park 2215 3 yrs funny 83 never fails to make me laugh http www reddit com r funny comments 1wipng never fails to make me laugh 17 3 yrs funny 3 what i think goes on during the kik conversations http www reddit com r teenagers comments 1lgui8 what i think goes on during the kik conversations 1533 3 yrs teenagers 63 the reason why i watch south park http www reddit com r funny comments 1eoyxb the reason why i watch south park 62 3 yrs funny 4 one of my favorite south park moments http www reddit com r funny comments 1dal1w one of my favorite south park moments 2025 4 yrs funny 544 8 1 2 inches http www reddit com r funny comments 1a72wv 8 12 inches 93 4 yrs funny 6 south park at its best http www reddit com r funny comments uxro7 south park at its best 1225 4 yrs funny 59 eight and a half inches http www reddit com r funny comments lcqvb eight and a half inches 40 5 yrs funny 1 hi i am eight and a half inches http www reddit com r funny comments jkfo1 hi im eight and a half inches 677 5 yrs funny 82 my favourite south park joke http www reddit com r funny comments 56zj7a my favourite south park joke 5349 6 mos funny 85 this is why love south park http www reddit com r funny comments 2mhpou this is why love south park 179 2 yrs funny 5 no midgets http www reddit com r funny comments 18pwlb no midgets 75 4 yrs funny 4 oh eric http www reddit com r funny comments 12ou74 oh eric 1381 4 yrs funny 45 me when i first started using the internet x post from r southpark http www reddit com r funny comments se4gp me when i first started using the internet xpost 1539 5 yrs funny 235 no love for midgets http www reddit com r funny comments oyqmp no love for midgets 717 5 yrs funny 28 midgets pisses me off http www reddit com r funny comments 4ou1fk midgets pisses me off 2332 10 mos funny 33 midgets piss me off http www reddit com r funny comments 41exqh midgets piss me off 3259 1 yr funny 34 midgets piss me off http www reddit com r southpark comments 41ed2i midgets piss me off 4197 1 yr southpark 95 for my cake day i present the picture that got me addicted to reddit http www reddit com r funny comments 1tgy10 for my cake day i present the picture that got me 464 3 yrs funny 38 my favorite south park moment http www reddit com r funny comments 1xf7uu my favorite south park moment 14 3 yrs funny 3 hungdaddy http www reddit com r funny comments 1bjig9 hungdaddy 131 4 yrs funny 4 cartman is always picky when choosing friends http www reddit com r southpark comments 21er0f cartman is always picky when choosing friends 1338 3 yrs southpark 26 i am eight and a half inches http www reddit com r southpark comments 1mv7pn im eight and a half inches 371 3 yrs southpark 5 my all time favorite scene from south park http www reddit com r funny comments 1vn32q my all time favorite scene from south park 330 3 yrs funny 3 on the internet http www reddit com r funny comments 1lymtn on the internet 1570 3 yrs funny 55 welcome to the chatroom http www reddit com r funny comments 17gyc6 welcome to the chatroom 72 4 yrs funny 3 source karmadecay http karmadecay com results u8895334 ,1,funny
+LucyIsaTumor,yeah can you not anyone seeking more info might also check here title points age r comnts x post from r aww just a little scottish highland calf http www reddit com r vegan comments 69ecki xpost from raww just a little scottish highland 1326 1 dy vegan 46 fluffy scottish highland calf http www reddit com r aww comments 69btbv fluffy scottish highland calf 60417 1 dy aww 195 source karmadecay http karmadecay com r aww comments 69h63p fluffy scottish highland calf ,1,aww
+LucyIsaTumor,oh u bmartb18b1 anyone seeking more info might also check here title points age r comnts ohh nintendo http www reddit com r gaming comments 64gqkx ohh nintendo b 49700 26 dys gaming 874 subtle http www reddit com r gaming comments 5q88gy subtle b 613 3 mos gaming 18 oh nintendo http www reddit com r gaming comments 54m11t oh nintendo b 6573 7 mos gaming 1314 source karmadecay http karmadecay com results u8895281 b bigger ,3,gaming
+LucyIsaTumor,as unique as blockland anyone seeking more info might also check here title points age r comnts real life minecraft cat http www reddit com r pics comments 69id9y real life minecraft cat 20 19 hrs pics 5 psbattle this angular cat http www reddit com r photoshopbattles comments 68wvjd psbattle this angular cat b 80 3 dys photoshopbattles 6 what a visually pleasing feline unit http www reddit com r totallynotrobots comments 68u2gd what a visually pleasing feline unit b 9943 4 dys totallynotrobots 116 hmmm http www reddit com r hmmm comments 68smuo hmmm b 22900 4 dys hmmm 235 minecat http www reddit com r funny comments 68lm85 minecat b 6 5 dys funny 1 minecat http www reddit com r cats comments 68lh6z minecat b 12 5 dys cats 1 minecat http www reddit com r aww comments 68k9o1 minecat b 12 5 dys aww 4 a minecrafted cat http www reddit com r pics comments 68tlad a minecrafted cat b 26 4 dys pics 3 source karmadecay http karmadecay com r gaming comments 69l8by real life minecraft cat b bigger ,9,gaming
+LucyIsaTumor,the best kind of r threadkillers take my upvote in appreciation of your hard work ,6,worldbuilding
+LucyIsaTumor, flick ,1,AskReddit
+LucyIsaTumor,the giver ,1,books
+LucyIsaTumor,whelp i am not sure if you mean your pseudonym or not right off the bat i see your username and think you do not do anything too risqu using one that could easily be a first and last name which links any of your activity on reddit to you means you probably only use reddit for leisure based on that assumption i imagine you do not post very often i have yet to check your account this is still based on your name perhaps this is your first post now after checking your profile woah you link a lot to your name i take the risqu point back ,1,AskReddit
+LucyIsaTumor,huh i never would have expected a bi cyclist to be so hostile too bad you could not find a stick to throw in his spokes whether if there a reason to it i am sure there a couple of reasons i know friends will do that around each other mostly to show off that guy might have been having a bad day and he was just blowing off steam ,2,AskReddit
+LucyIsaTumor,sounds like op has a bad experience do tell i did not but a dude i knew on the school bus in pre middle school yelled at a guy on a bike the guy jumped and fell on the side of the road into some grass he looked fine that guy was a dick ,2,AskReddit
+LucyIsaTumor,our place totally gets this we just usually need a bit of a call ahead so the cooks are all aware and so that we can set aside a special amuse for them as well as ensure they have a number of options for each course to choose from we are a vegan place so we already appeal to the meat and dairy free it just takes a staff that all on board and understands the procedure ,2,nottheonion
+LucyIsaTumor,i have always had iffy results trying to get pygame running on a mac i have had students insist on using one as a previous commenter said i have used a virtual machine to get it working however runtime graphical issues and a whole slew of other issues came from this i certainly suggest getting a cheap laptop off ebay amazon with windows if you can ,1,pygame
+LucyIsaTumor,roadhog would be interesting all that metal flying everywhere it will be like a junk yard ,2,Overwatch
+LucyIsaTumor,hey mate just a quick heads up be sure to re read your post before sending it you stated this subreddit is full of experienced arg solvers and thought you guys would not have the best opinions and information that almost sounds like an insult do you mean to say that we would have the best opinions anyways nitpicking over be sure to check out the faq http wiki gamedetectives net index php title wiki faq can i make my own arg 3f for a bit of background on making your own arg if you need some help with creating said arg be sure to ask specific questions like would this be an interesting idea or has this been done before new and unique ideas are what keep args interesting so do not be afraid to be creative ,2,gamedetectives
+LucyIsaTumor,take your toxic shit to lol,2,Overwatch_Memes
+LucyIsaTumor,today op you were chosen ,4,mildlyinteresting
+LucyIsaTumor,calculated ,2,sports
+LucyIsaTumor,you know you can search google for this totally clever and original joke r darkhumor to check if something already been posted ,10,DarkHumor
+LucyIsaTumor,good news everyone ,3,AskReddit
+LucyIsaTumor,today of all days oh man that will be a great laugh in a couple of years you make sure he frames that picture ,10,funny
+LucyIsaTumor,yup that right we will see if they decide to stick to their old ways and make as cash grabby of a game as they can or they learn from their mistakes and listen to their community in order to improve the experience i am sure we are all hoping for the ladder however i wo not rule out the former ,2,AskReddit
+LucyIsaTumor,then it got progressively even more tedious as you would keep going to the same places fighting the exact same enemies i knew a bunch of the instances like the back of my hand i tried logging back in and completing some loose ends after finishing the main story if you call that a story and found that most of the side quests were locked behind dlc walks cash grab with peter to peer that relied on telling its story through online text bad game design ,2,AskReddit
+LucyIsaTumor,i used to fake my mom signature on homework assignments in grade school which confirmed i completed the reading needless to say i now read at about a 5th grade level and can still forge her signature perfectly ,8,AskReddit
+LucyIsaTumor,boyhood,1,AskReddit
+LucyIsaTumor,my job and my good health ,2,AskReddit
+LucyIsaTumor,you are playing for an audience now ,1,gaming
+LucyIsaTumor, support for marijuana at an all time high there a news writer who smiling at his word play ,2,news
+LucyIsaTumor,xpost from r creepy another picture http imgur com gk1tsi7 and posted by u wendyrunningmouth edit also the creator website http www antonygormley com ,2,SCP
+LucyIsaTumor,you are so great thank you ,2,StardewValley
+LucyIsaTumor,you did it you are amazing thanks so much man you did an awesome job ,3,StardewValley
+LucyIsaTumor,well do not try anything with 9 11 in the title you cannot get any faker than that i am kidding try microsoft flight sim,2,gaming
+LucyIsaTumor,not the bees not the beeeees ,1,funny
+LucyIsaTumor,one that is not very punny ,1,Jokes
+LucyIsaTumor,myself ,1,AskReddit
+LucyIsaTumor,hydro electrics ,1,AskReddit
+LucyIsaTumor,take a shot for every repost you see and do not feel like calling bullshit on ,1,AskReddit
+LucyIsaTumor,huh must be related to jb,1,Jokes
+LucyIsaTumor,i am blue long live blue corner,1,AskReddit
+LucyIsaTumor,they also both got bugs in their grill thanks whose line ,2,DarkHumor
+LucyIsaTumor,beautiful i love it it reminds me of harvest moon island of happiness that bubbly face have you considered doing one of penny i would love to see that ,2,StardewValley
+LucyIsaTumor,i like that idea you would just need to engineer a way for the wall to be covered once you cross through the portal and for that wall to retract once work is over then you could set up the portal that auto fires a portal like the one where you first retrieve the portal gun that goes off when work is over could you imagine waiting for that portal to open up talk about running out the clock ,1,Showerthoughts
+LucyIsaTumor,ah reminds me of good old limmy https youtu be rl4qms0zh w ,5,funny
+LucyIsaTumor, yeah https m youtube com watch v 3tbqdkgiqni ,2,NintendoSwitch
+LucyIsaTumor,would be way better on the wii u like runescape ,7,NintendoSwitch
+LucyIsaTumor,data ,1,dataisbeautiful
+LucyIsaTumor,you are totally right that must have been just a tale someone had told me that i i have took as truth ,1,AskReddit
+LucyIsaTumor, dmx where the hood at is usually a song people play to get pumped or to feel badass however the song is really homophobic read over the lyrics ,1,AskReddit
+LucyIsaTumor,i thought this wore out the e brake faster which would suck when the e brake is absolutely necessary and it starts faulting,2,AskReddit
+LucyIsaTumor,i just did not know they tracked uninstall data since uninstalling an app is merely wiping the data off your phone i did not think this would instantly update with google play i thought you would have to revisit the app page for google to recognize that the app is no longer installed on the device and ask if you would like to install it again yet i suppose this is incorrect ,2,Showerthoughts
+LucyIsaTumor,i just saw that who would have guessed haha that would be perfect then ,1,Showerthoughts
+LucyIsaTumor,eh i do not know about that while i would love the ability to see shitty apps off the bat google play would also have to keep tabs on how long you have had an app downloaded would this be internal based on the phone clock which of course can be manipulated or would it be server side something about recording how long i have had an app makes me a tad uncomfortable you know the time could be self reported ,3,Showerthoughts
+LucyIsaTumor,jack black,1,AskReddit
+LucyIsaTumor,goodbye everyone this was beautiful you are all great ,1,place
+LucyIsaTumor,data ,1,baseball
+LucyIsaTumor,ah reminds me of the good old days of top gear ,1,funny
+LucyIsaTumor,anyone else going out of their way to downvote these posts now ,1,place
+LucyIsaTumor,data ,-7,dataisbeautiful
+LucyIsaTumor,this this is beautiful even even the text is in blue praise the blue empire ,3,TheBlueCorner
+LucyIsaTumor,data ,2,funny
+LucyIsaTumor,data ,3,dataisbeautiful
+LucyIsaTumor,please advise u xgeneric has betrayed https i snag gy 3ocozg jpg the mighty blue empire we recommend that you avoid this false sheppard and continue spreading the purity of the blue corner ,1,TheBlueCorner
+LucyIsaTumor, please note u jackdarrah has betrayed https i snag gy zlneqf jpg the mighty blue empire we recommend that you disregard this false sheppard it looks like someone has joined the dark side i will admit i am touched by jackdarrah first steps we were all once in his shoes placing random pixels here and there continue to fight for cause jackdarrah and i will continue considering you a blue brother ,0,place
+LucyIsaTumor, please note u jackdarrah has betrayed https i snag gy zlneqf jpg the mighty blue empire we recommend that you disregard this false sheppard it looks like someone has joined the dark side i will admit i am touched by jackdarrah first steps we were all once in his shoes placing random pixels here and there continue to fight for cause jackdarrah and i will continue considering you a blue brother ,5,TheBlueCorner
+LucyIsaTumor,yeah about that i do not think anyone in this thread should listen to someone who betrays the blue empire https i snag gy zlneqf jpg for shame u jackdarrah,1,TheBlueCorner
+LucyIsaTumor, says the dirty commie https i snag gy vjjbzd jpg ,1,BlueCorner
+LucyIsaTumor, funny to hear someone complaining when they are not pure themselves https i snag gy z0lynp jpg ,1,BlueCorner
+LucyIsaTumor, judas iscariot i hope you burn for your sins https i snag gy 15kvso jpg ,2,place
+LucyIsaTumor,amen especially after what happened to us with destiny https clips twitch tv resilientstronghorseradishthunbeast ,0,TheBlueCorner
+LucyIsaTumor,good morning glory to the motherland ,1,TheBlueCorner
+LucyIsaTumor,sure that turned out real well for the germans did not it destroy everything until there only us that remains no destroying everything is not the solution unless we want utter chaos we create pacts to ensure the ultimate longevity of the blue campaign such as the excellent pact we have formed with r ainbowroad we stand together or not at all http i imgur com roroeys png ,1,BlueCorner
+LucyIsaTumor,yeah i am not sure what u cbennettso is talking about i see just one plain solid color as well the guy might have the keyboard burned into his screen since he uses it so often,11,BlueCorner
+LucyIsaTumor,data ,5,dataisbeautiful
+LucyIsaTumor,wonder what would have happened if you got caught by a ghost do your breaks engage i cannot wait for self driving cars ,1,gaming
+LucyIsaTumor,they updated the site i have never seen a website withdraw it statement by striking through everything they had written check it again for the update ,5,Android
+LucyIsaTumor,that awesome keep up the good work ,3,gaming
+LucyIsaTumor,nice ,3,2007scape
+LucyIsaTumor,ooo this is called the limmy show it scottish and can usually be found on youtube ,1,funny
+LucyIsaTumor,yup totally if you have a bathroom with a fan though that activated by the light switch you will have to shower in the dark for it to work you need a steamy room ,2,AskReddit
+LucyIsaTumor,was the original shuttle not on a concrete airport strip ,1,pics
+LucyIsaTumor,either you replace it or go dumpster diving and buy a lot of detergent to wash out that sour cream smell ,1,AskReddit
+LucyIsaTumor,stop,4,AskReddit
+LucyIsaTumor,sure seems like someone living up to the standard,2,AskReddit
+LucyIsaTumor,margret thatcher,2,AskReddit
+LucyIsaTumor,ooo i just love the smell of that blue cheese ,2,AskReddit
+LucyIsaTumor,why i could get some of that three maybe four times a day ,2,AskReddit
+LucyIsaTumor,yo mommas so old she knew burger king when he was just a prince ,2,AskReddit
+LucyIsaTumor,boy that does not go down easy,3,AskReddit
+LucyIsaTumor,can i get a little less fat on that ,2,AskReddit
+LucyIsaTumor,convert all that cash to sweet sweet btc,1,AskReddit
+LucyIsaTumor,press f5,1,AskReddit
+LucyIsaTumor, why not zoidberg http s2 quickmeme com img 8e 8e56e930f42b66d54ef9dcb1080966a360e240c3d4310e3cb9aea49534dba42c jpg ,1,AskReddit
+LucyIsaTumor,op contemplates comment ask reddit how to not become a low life ,7,AskReddit
+LucyIsaTumor,you know it amigo ,1,AskReddit
+LucyIsaTumor,the slip slide icecapades in crash twinsanity ,0,AskReddit
+LucyIsaTumor,hydroelectrics ,2,AskReddit
+LucyIsaTumor,i need help,1,AskReddit
+LucyIsaTumor,shitposting,1,AskReddit
+LucyIsaTumor,anyone who says take it out and xyz they usually review your account if you pull out anything more than a few thousand dollars they would catch the mistake if you tried pulling out that much cash you have to spend it all electronically and pray they do not shut down your account for suspicious spending ,1,AskReddit
+LucyIsaTumor,crippling depression,8,AskReddit
+LucyIsaTumor,jenga,3,AskReddit
+LucyIsaTumor,in fact forget the trick or treating ,3,AskReddit
+LucyIsaTumor,blackjack and hookers,3,AskReddit
+LucyIsaTumor, the oc that you see from twitter and facebook ,5,AskReddit
+LucyIsaTumor,oh fair enough they actively pronounce the work ask as aks as in may i aks you a question ,1,AskReddit
+LucyIsaTumor,jack black,1,AskReddit
+LucyIsaTumor,before or after the crash ,0,AskReddit
+LucyIsaTumor,hitting quit to desktop opening up my steam library then selecting a different game ,2,AskReddit
+LucyIsaTumor,margaret thatcher,3,AskReddit
+LucyIsaTumor,thinking about sleeping,1,AskReddit
+LucyIsaTumor,using snapchat filters,2,AskReddit
+LucyIsaTumor,you are free to go,1,AskReddit
+LucyIsaTumor,indubitably ,1,AskReddit
+LucyIsaTumor,oh boy you must love futurama ,1,AskReddit
+LucyIsaTumor,pretty fantastic i live in northern california in a village a general amount of people respond when asked why did you move here that they simply moved because of the weather it a little colder where we are but it never gets too hot plus we are about an hour away from a large city and we are right smack down in the middle of wine country since the weather so fair i cannot wait to go back there in collegio earning my piece of paper ,1,AskReddit
+LucyIsaTumor,as deep as a giant ice cube that slowly melting because of pollution,1,AskReddit
+LucyIsaTumor,if the two of you are fucking it probably a good sign they are attracted to you ,3,AskReddit
+LucyIsaTumor,my phone likes to auto correct the word sorry to dirty regardless how often i reset my dictionary thanks fleksy http fleksy com you beautiful bastard anyways the story goes a little like this my best friend elroy dog was hit by a car and he just told me about the news i respond with something like oh my god elroy i am so so dirty i cannot believe that this is happening i am so dirty is there anything i can do for you needless to say he did not respond ,2,AskReddit
+LucyIsaTumor,working as a host at an upscale restaurant boiling hot outside beautiful views great staff i miss that place ,1,AskReddit
+LucyIsaTumor,oh you know the ol naughty pillows,2,AskReddit
+LucyIsaTumor,yup crushing my spirits and i have not even graduated yet,2,AskReddit
+LucyIsaTumor,holden caulfield anyone ,2,AskReddit
+LucyIsaTumor,mangos,2,AskReddit
+LucyIsaTumor,cold for sure you can always put on more layers if you are too cold but you can only take so many off if it too hot ,1,AskReddit
+LucyIsaTumor,oops good point maybe when they finally put a word to the flappy airbags they wanted to use it ,1,AskReddit
+LucyIsaTumor,any scientific terminology for genitalia especially in a regular social context yo girl mind if i grab those mammary glands ,1,AskReddit
+LucyIsaTumor,really any food i imagine that you would have to bake like imagine trying to eat a cake one ingredient at a time source of recipe http allrecipes com recipe 17481 simple white cake 1 cup white sugar type 2 friendly 1 2 cup butter trailer park delight 2 eggs eat them raw 2 teaspoons vanilla extract this stuff is like mouth cancer 1 1 2 cups all purpose flour tastes as bland as my father love 1 3 4 teaspoons baking powder probably okay,1,AskReddit
+LucyIsaTumor,hannibal would beg to differ,2,AskReddit
+LucyIsaTumor,hydroelectrics ,1,AskReddit
+LucyIsaTumor,ahh you got me with that one this belongs on r jokes my friend take my upvote,1,Showerthoughts
+LucyIsaTumor,a nice cup of joe joe my roommate he does not seem to enjoy it as much as me haha but really coffee is the only thing that gets me up in the morning ,18,AskReddit
+LucyIsaTumor,reality unless you are a frequent lucid dreamer you wo not have any control over how your dreams end up at least you have some control in reality ,1,AskReddit
+LucyIsaTumor,me call me old fashioned but i like playing video games with a controller or keyboard mouse i am not into those virtual reality controllers i like feeling the controls it like a book them what is a book ,1,AskReddit
+LucyIsaTumor,oh okay i get it now ,2,mildlyinteresting
+LucyIsaTumor,i have been trying to find some space songs ever since i listened to this wonderful space shanty https www youtube com watch v iimnhnrelz0 original https www youtube com watch v mdxfqtd rgq the last song i listened to was pushin the speed of light https www youtube com watch v ud6livjkwya which i loved you may also like ballad of a spaceman https www youtube com watch v n8ccdodygc0 by the same singer ,1,AskReddit
+LucyIsaTumor, the begginer guide http store steampowered com app 303210 from the davey wreden produced by the galatic cafe http www galactic cafe com it narrated by the creator of the stanley parable https www stanleyparable com and the two games are more or less related so i certainly suggest checking out the stanley parable as well ,1,AskReddit
+LucyIsaTumor,this gives me anxiety,3,mildlyinteresting
+LucyIsaTumor, how to leave respectful and proper comments online https www youtube com user commentiquette oh and by the way if it were not for ted cruz hypnotizing us like zombies while we sit idly by waiting for a second coming of 7 11 we would probably be able to solve the energy crisis that preventing us from ascending to the clouds like moon men from outer space c 3 that a rocket ship blasting off into the clouds,2,AskReddit
+LucyIsaTumor,with a cold refreshing glass of stress ,1,AskReddit
+LucyIsaTumor,i do not play professionally but i particularly like esports i just love the excitement that comes from these events just like any sporting event plus i am not the most fit person in the world so it a sport that i can practice and play with friends i personally like smite https www smitegame com and starcraft http us battle net sc2 en there so much variation though you can play anything ,1,AskReddit
+LucyIsaTumor, doging intensifies https www youtube com watch v wopff tpkns ,4,aww
+LucyIsaTumor,i agree i used to want to make as much money as i could so i kept searching for high paying jobs but one day i realized that i wanted to live a happier life i am now working a 9 5 so that i can afford college to get my degree in computer science i have had some of the best experiences of my life playing video games and i want to try and create those experiences for others maybe it not exactly living off gaming but it as close as i can get make your dreams happen anyway you can u svaede,2,AskReddit
+LucyIsaTumor,ah reminds me of my childhood ,2,gaming
+LucyIsaTumor,i would give you gold for that hgttg reference but i am a poor college kid i hope this helps http i imgur com b5oibc6 png ,2,AskReddit
+LucyIsaTumor,disabling ublock did not quite work for me which leads me believe this might be a silverlight issue since both firefox and chrome both browsers dropped support did not work with this app whereas edge internet explorer worked ,1,InternetIsBeautiful
+LucyIsaTumor,looks like reddit gave it the ol hug o death or it does not work quite right on mobile ,2,InternetIsBeautiful
+LucyIsaTumor,ohhh i know what you are saying i would let ed review my hoagie if you catch my drift ,3,funny
+LucyIsaTumor,tomorrowil there are no more blockbusters,196,pics
+LucyIsaTumor,nice,11,2007scape
+LucyIsaTumor,shitty tl dr it an iphone only wrist band with 2 5 hours of battery life currently only one supported third party app ,11,gadgets
+LucyIsaTumor,you short for third and yet got first ,2,futurama
+LucyIsaTumor, where the hood where the hood where the hood at ,1,aww
+LucyIsaTumor,i see someone has been to r darkhumor,1,Jokes
+LucyIsaTumor,gotta love r 2007scape take my upvote,3,GifSound
+LucyIsaTumor,you seem like the kind of guy who actively shares his chlamydia ,1,AskReddit
+LucyIsaTumor,totally agree i loved a wonderful life after playing harvest moon ds for so many years excellent game for fans of the old harvest moon series ,2,StardewValley
+LucyIsaTumor, oh shit i better skedaddle http media1 giphy com media 35ptqfiy14oea giphy gif ,1,iOSthemes
+LucyIsaTumor,ha now they will be checking ,4,Shoplifting
+LucyIsaTumor,ha get an android ,-2,iOSthemes
+LucyIsaTumor,oh i know right i always tell those people to go stand on the edge of a cliff and tell me if they see a curve on the horizon do not see it yeah maybe if you jump you will notice it ,1,AskReddit
+LucyIsaTumor,pants that say the moon landing was real as if anyone would believe that no but for real check out my boys over at alpha industries http www alphaindustries com they got this exact sort of heavy duty clothes that will look good ,1,streetwear
+LucyIsaTumor,the fact that everyone believes the moon landing was real,0,AskReddit
+LucyIsaTumor,source ,1,ItalyInformatica
+LucyIsaTumor,you are a fair mediator 1 5 it is that has op sitting at a grand total of 2 5 ,2,funny
+LucyIsaTumor,you are the real og,2,AskReddit
+LucyIsaTumor,play video games made by u yemto,1,AskReddit
+LucyIsaTumor,you are kidding 2 for misleading me op you are in the negative now ,3,funny
+LucyIsaTumor,and no artificial flavors ,1,mildlyinteresting
+LucyIsaTumor,and raw ,1,mildlyinteresting
+LucyIsaTumor,man that some excellent thrift store prices especially the monitors i am jealous ,1,ThriftStoreHauls
+LucyIsaTumor,love this ,1,u_cyberpunkme
+LucyIsaTumor,and gluten free ,1,mildlyinteresting
+LucyIsaTumor,you are totally right however people just want to be told what to do 75 of my job is just googling the customer question it the novelty of the user thinking their questions is being answered by a professional when really we are just forum diving have you tried turning it off and on again ,3,AskReddit
+LucyIsaTumor,a lemon party,1,AskReddit
+LucyIsaTumor,fair trade too ,1,mildlyinteresting
+LucyIsaTumor,that called growing up mate,1,Showerthoughts
+LucyIsaTumor,i am not sure i know that it would make a hell of a comedy show though,2,AskReddit
+LucyIsaTumor, it an octothorpe,1,funny
+LucyIsaTumor,salvia,2,AskReddit
+LucyIsaTumor,i will tell you why what kind of sick bastard keeps their d in the refrigerator ,7,Showerthoughts
+LucyIsaTumor, 1 for repost 1 for unique title your move op,11,funny
+LucyIsaTumor,all good my friend it was not as bad as we had expected we prerecorded a message to let people know of the outage or should i say increased error rates ,1,news
+LucyIsaTumor,wait do not do it if you look at the last image it shows the user being attacked be fire you do not want that everything will change when the fire nation attacks praise aang,2,funny
+LucyIsaTumor,well i guess i would accept 3 as long as c was equal to the value of 3 if you are confused please look over this python syntax c 3 is true dicks out for harambe ,1,funny
+LucyIsaTumor,the stanley parable is an excellent one if you have never played it if you have then i highly suggest a game also made by davey wreden of the galatic cafe http www galactic cafe com called the begginer guide http store steampowered com app 303210 a game that is completely open to interpretation yet most believe is davey reaction to the success of the stanley parable ,1,gaming
+LucyIsaTumor,if you have a pet raccoon you probably live in the woods ,2,AskReddit
+LucyIsaTumor,i never realized how much fake laughing was involved in not crying ,1,Showerthoughts
+LucyIsaTumor,notice something that they have that relates to something you like ie if they are wearing a video game t shirt or have a video game related item on their desk point it out and compliment it ,1,AskReddit
+LucyIsaTumor,please let us at least colonize mars if not another planet within my lifetime i wanna be a space pirate ,1,AskReddit
+LucyIsaTumor,i have heard it because you feel anonymous in your car like no can ever hurt you i learned the hard way that you do not fuck with bubba,1,AskReddit
+LucyIsaTumor,woke up to a shitstorm at my it department half of our businesses websites are hosted on amazon web servers ,21,news
+LucyIsaTumor, 73 pontiac firebird haha no i would certainly not recommend it to others my second car however a 95 gmc suburban i would recommend to anyone best damn vehicle i have ever owned ,1,AskReddit
+LucyIsaTumor, to repost or not to repost ,1,AskReddit
+LucyIsaTumor,no kidding we inherit a bit of knowledge here and there very rudimentary knowledge we call instinct but it would be amazing if we could inherit the inter workings of a fully developed adult brain although evolutionary speaking we would likely have to deliver every child by c section since their brains are too big to be birthed naturally that why human brains are limited to the size they are i believe if humans were no longer delivered in a natural sense our natural cranial capacity would increase due to natural selection babies with bigger heads do not always make it ,1,Showerthoughts
+LucyIsaTumor,certainly show up on time even five minutes early can display a good work ethic just because this is a professional atmosphere do not be afraid to ask questions however do not repeatedly ask the same question because that will become a nuisance take notes of all the questions you have so that you quickly learn what is expected of you if you are dealing with customers i suggest getting familiar with good customer service experience take a course if you have to there a few on lynda com that are excellent but currently lynda is down due to the amazon web service issue essentially just try your best to make the customer happy without being overbearing feel free to go over and above if it will make the customer happy and does not interfere dramatically with your workload however you are just learning the ropes i would suggest making a habit out of your regular work schedule and learning what you need to do in your job then begin going above what is expected of you lastly to behave like a grown person means just do not do anything that a teenager working a movie theater job would do i work in an office where we still have a good time and joke around do not be he one serious guy that never likes to joke however when it gets down to business you need to be ready focused and serious to handle the task at hand ,1,AskReddit
+LucyIsaTumor,the government robots that they put in my head when i was born,1,AskReddit
+LucyIsaTumor,gotta love how stupidly cute pigeons are ,2,gifs
+LucyIsaTumor,work at an it call center for a business that has half of its information stored in those servers looking forward to the shitstorm today ,1,worldnews
+LucyIsaTumor,i know right the femi paradox has to be one of my favorites too really kick started that channel ,2,gaming
+LucyIsaTumor,credit goes to kurzgesagt a wonderful channel that does quite informative videos the exact video is this https youtu be dhyuyg8x31c one regarding whether or not robots should deserve rights in the future ,2,gaming
+LucyIsaTumor,or stick their dick on it ,1,mildlyinteresting
+LucyIsaTumor,second highest rated post on reddit maybe they wo not notice it a repost ,1,pics
+LucyIsaTumor,gotta say i watched pewds back when he was playing amnesia gotta love his girly scream back then miss you bro ,1,AskReddit
+LucyIsaTumor, old joke but cannot blame you for hoping it was new try r darkhumor op,2,Jokes
+LucyIsaTumor,lemon juice,0,AskReddit
+LucyIsaTumor,alright krieger calm down ,2,AskReddit
+LucyIsaTumor,ours still has a functional n64 i bet one of our employees is a fan and keeps it running that a shame they do not run the gamecubes there it was such a wonderful system ,420,gaming
+LucyIsaTumor,i am sure you could knock on area 51 front door and ask them to pass it along ,1,pics
+LucyIsaTumor,exactly i even had one group of 11 write out percentages they wanted each person to pay on the back of their receipt they handed me this along with a stack of credit cards and cash insane ,1,AskReddit
+LucyIsaTumor,i agree with this the more minimal the better in my opinion nothing is more satisfying than seeing an entire collection of an author work with similar minimal bindings simple elegance ,2,AskReddit
+LucyIsaTumor,too bad i cannot upgrade my imagination when it starts degrading ,1,Showerthoughts
+LucyIsaTumor, same way as you he replied he then proceeded to whip it out and stick it in some water to drink are men not merely mini elephants ,2,Jokes
+LucyIsaTumor,i am a host but still front of the house split the check seven different ways and each person pays in a different form of payment ie check credit card cash gift certificate etc i get that you cannot have one person pay for everything but try and stick to one payment type ,1,AskReddit
+LucyIsaTumor,how many marijuana did you eat ,1,Showerthoughts
+LucyIsaTumor,yup came to post this if you would like to see a pretty good video summing this up check out kurzgesagt explanation https youtu be snhhvqgsmec ,2,AskReddit
+LucyIsaTumor,then you are one of the lucky ones hopefully it never happens to you mate it sucks to care about somebody when they do not care back ,1,AskReddit
+LucyIsaTumor,i have that exact picture in my wallet just in case i am about to make any stupid purchases i believe i saw that idea on reddit somewhere,2,funny
+LucyIsaTumor,browsing reddit,3,AskReddit
+LucyIsaTumor, target audience ,8,gaming
+LucyIsaTumor,you are in a car though just speed up ,1,AskReddit
+LucyIsaTumor,same here i love melatonin ,3,AskReddit
+LucyIsaTumor,repost bad op,3,pics
+LucyIsaTumor,hitting snooze on my alarm clock ,1,AskReddit
+LucyIsaTumor,sounds like op recently got inducted,1,AskReddit
+LucyIsaTumor,i do the hawaiian hang loose sign ,2,AskReddit
+LucyIsaTumor,i was going to ask if the soil could be packed in such a way to create a stable structure ,1,Futurology
+LucyIsaTumor, scp 093 http www scp wiki net scp 093 ,2,Showerthoughts
+LucyIsaTumor,now that just stress inducing ,29,MapsWithoutNZ
+LucyIsaTumor,we are all gonna die soon this will have all been meaningless not my circus not my monkey ,1,AskReddit
+LucyIsaTumor,damn you beat me to it just like i beat my dad while i was bouncing on my boys d over here ,1,funny
+LucyIsaTumor, the beginners guide http store steampowered com app 303210 made by davey wreden at the galactic caf http www galactic cafe com same guy who made the stanley parable https www stanleyparable com also fantastic a little more well known while the game still open to complete interpretation the game is usually said to be davey responce to his success with the stanley parable i highly suggest it cheap on steam too 10 currently ,2,AskReddit
+LucyIsaTumor,well this is shitty,1,funny
+LucyIsaTumor,username checks out ,1,space
+LucyIsaTumor, i found waldo http i imgur com hd90vlp jpg color for reference http i imgur com dt1oium jpg credit to u 108241 for the full color image ,1,mildlyinteresting
+LucyIsaTumor,lvls ,56,AskReddit
+LucyIsaTumor,reminds me of uncharted ,5,creepy
+LucyIsaTumor,makes me think the sheep is yelling are ye crows not amused are you such savages that you will wait to plunder that with which is already dead whilst being grieved by its own flee baaa baaa away with you ,1,Art
+LucyIsaTumor,definitely a child laughter ,1,AskReddit
+LucyIsaTumor,yes yes yes i am always looking for animated pixel art and these voxel illustrations are always absolutely stunning fantastic work op ,6,Art
+LucyIsaTumor,i can second this saved my internet life ,2,AskReddit
+LucyIsaTumor,jet set radio future was one particular favorite of my childhood i have not listened to the original one yet i have heard it pretty great ,1,AskReddit
+LucyIsaTumor,honestly it would be great to have someone there writing tickets all day i am a resident at fort bragg only a small piece of the beach looks anything like ops picture anymore a large amount of it has been taken away and only brown black glass that no one wanted remains it pretty sad to see ,183,pics
+LucyIsaTumor,private servers are not a possibility are they edit there were a couple developments for asheron call private servers however i could not find a great link to walk you through the download there is another option if he would like to play alone here https sourceforge net projects uas2 which would be a server emulator ,1,videos
+LucyIsaTumor,perhaps the millennium falcon was designed to look like an amish playspace ,20,mildlyinteresting
+LucyIsaTumor,sorta looks like they are plotting something icey,1,mildlyinteresting
+LucyIsaTumor,articles a fantastic read website it hosted on is cancerous on mobile ,2,space
+LucyIsaTumor,i see new zealand good job op,2,DIY
+LucyIsaTumor,ya like jazz ,2,pics
+LucyIsaTumor,so does she like jazz ,1,pics
+LucyIsaTumor,just wanted to reply in order to sign a tiny piece of history benny harvey rip miss you big man gone but not forgotten ,1,funny
+LucyIsaTumor,this is some excellent progress man i do not have my rooted android with me at the moment but if no ones spoofed in two weeks i will take a look at what i can come up with i do not believe he would expect us to actually travel to an almost desolate island then again why does our location have to be there at all is there something significant about this island any lore behind it perhaps the author has a connection to this place i will do a little research and comment back if i find anything ,1,dnbhl
+LucyIsaTumor,replying to your comment just to have a trail to look back on,0,personalfinance
+LucyIsaTumor,this is a sin they should stop talking ,1,funny
+LucyIsaTumor,probably nothing will happen when you die ,2,AskReddit
+LucyIsaTumor,note you need klwp pro to import jame theme this will cost you 3 50 just a heads up ,1,nomanshigh
+LucyIsaTumor,make canada great again ,1,nottheonion
+LucyIsaTumor,a men,2,Nostalrius
+LucyIsaTumor,i know right i need to know haha i have not seen any blizzcon information so i am in the dark i tried a reverse image search to see where the guy pulled this image from but it returned no results ,4,Nostalrius
+LucyIsaTumor,what does this mean what is the source are they back ,6,Nostalrius
+LucyIsaTumor,futurama,4,AskReddit
+LucyIsaTumor,woah dude you just met a main character ,1,funny
+LucyIsaTumor,looks like sisyphus is at it again ,1,pics
+LucyIsaTumor,mitochondria is the powerhouse of the cell,1,AskReddit
+LucyIsaTumor,sorta gives it a morrowind feel to it ,2,gaming
+LucyIsaTumor,i am curious what is your major ,1,AskReddit
+LucyIsaTumor,not only that she also produced a hologram that flew itself into the c4 rigged twin towers as well as abducted anne frank sure smells like satan to me,0,conspiracy
+LucyIsaTumor,the one right before my dad left to buy a pack of cigarettes where is he ,1,AskReddit
+LucyIsaTumor,that the moon landing was not staged,1,AskReddit
+LucyIsaTumor,to the moon for sure,4,AskReddit
