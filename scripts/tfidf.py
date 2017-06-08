@@ -45,25 +45,27 @@ def get_tfidf_transform(master_df):
     print('Vectorizing')
     vectorizer = TfidfVectorizer(stop_words='english',
                                  lowercase=False,
-                                 max_features=10000,
+                                 max_features=1000,
                                  min_df = 0.00001,
                                  max_df = 0.3
                                  )
     now = round((time() - start)/60., 2)
     print('Fitting, now: %s Mins' % now)
     vectorizer.fit(master_df['body'].values)
+    now = round((time() - start)/60., 2)
     print('Transforming, now: %s Mins' % now)
     X = vectorizer.transform(master_df['body']).todense()
-    nmf = NMF(init='random', n_components=200)
+    nmf = NMF(verbose=1, n_components=20)
+    now = round((time() - start)/60., 2)
     print('Fitting NMF, now: %s Mins' % now)
     nmf.fit(X)
-    return nmf
+    return nmf, X
 
 if __name__ == '__main__':
     start = time()
 
     master_df = pd.read_pickle('pickles/master_df.pkl')
-    nmf = get_tfidf_transform(master_df)
+    nmf, X = get_tfidf_transform(master_df)
 
     end = time()
     print('This took %s minutes' % round((end - start)/60., 2))

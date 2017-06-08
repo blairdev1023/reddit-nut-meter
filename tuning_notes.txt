@@ -1,0 +1,6 @@
+---tfidf---
+max_features, min_df, max_df
+
+---nmf---
+init?, n_components, max_iter vs n_iter_?,
+***ALWAYS KEEP TRACK OF reconstruction_err_!!!!!***
