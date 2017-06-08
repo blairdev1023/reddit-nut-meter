@@ -249,6 +249,6 @@ if __name__ == '__main__':
 
     print('starting...')
     start = time()
-    supervised_not_nuts_scrape()
+    unsupervised_not_nuts_scrape()
     end = time()
     print('This took %s minutes' % round(float(end - start)/60, 2))
