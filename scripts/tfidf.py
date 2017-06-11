@@ -4,6 +4,7 @@ from time import time
 from os import listdir
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import NMF
+from sklearn.decomposition import LatentDirichletAllocation as LDA
 import pickle
 from nltk.corpus import stopwords
 
@@ -41,7 +42,7 @@ def get_master_df():
 
 def get_tfidf_transform(master_df):
     '''
-    returns an nmf model and X numpy array. X is the tfidf matrix and nmf
+    returns an lda model and X numpy array. X is the tfidf matrix and nmf
     is the sklearn nmf model that is fitted with X
 
     master_df - pandas dataframe
@@ -49,27 +50,32 @@ def get_tfidf_transform(master_df):
     '''
     master_df['body'] = master_df['body'].astype(str)
     print('Vectorizing')
-    vectorizer = TfidfVectorizer(stop_words=stop,
+    vectorizer = TfidfVectorizer(stop_words='english',
                                  lowercase=False,
-                                 max_features=2000,
-                                 min_df = 0.000001,
-                                 max_df = 0.1
-                                 )
+                                 max_features=10000,
+                                 ngram_range=(1,2),
+                                 max_df=0.8,
+                                 min_df=3)
     now = round((time() - start)/60., 2)
-    print('Fitting, now: %s Mins' % now)
+    print('Fitting Vectorizer, now: %smin' % now)
     vectorizer.fit(master_df['body'].values)
     now = round((time() - start)/60., 2)
-    print('Transforming, now: %s Mins' % now)
-    X = vectorizer.transform(master_df['body']).todense()
-    nmf = NMF(verbose=1, n_components=25)
+    print('Transforming Vector, now: %smin' % now)
+    X = vectorizer.transform(master_df['body'])
+    # nmf = NMF(verbose=1, n_components=25)
+    lda = LDA(n_topics=50,
+              verbose=2,
+              evaluate_entry=1,
+              max_iter=100,
+              n_jobs=-1)
     now = round((time() - start)/60., 2)
-    print('Fitting NMF, now: %s Mins' % now)
-    nmf.fit(X)
+    print('Fitting Model, now: %smin' % now)
+    lda.fit(X)
     now = round((time() - start)/60., 2)
-    print('Done Fitting NMF, now: %s Mins' % now)
-    return nmf, X
+    print('Done Fitting Model, now: %smin' % now)
+    return lda, X
 
-def append_topic_idx(master_df, nmf, X):
+def append_topic_idx(master_df, model, X):
     '''
     Tranforms and fetches W from the nmf model using the training data in X.
     Since W is comments vs. topics we find the index of the max index and
@@ -78,16 +84,16 @@ def append_topic_idx(master_df, nmf, X):
 
     master_df - pandas dataframe
         should be your running master
-    nmf - sklearn nmf model
+    model - sklearn nmf/lda model
         needs to be already fitted with the same data, X
     X - pandas dataframe or numpy array
         the same data the nmf was trained on, used for transforming
     '''
     now = round((time() - start)/60., 2)
     print('Transforming X, now: %s Mins' % now)
-    W = nmf.transform(X)
+    W = model.transform(X)
     now = round((time() - start)/60., 2)
-    print('Appending indicies, now: %s Mins' % now)
+    print('Appending Indicies, now: %s Mins' % now)
     master_df['topic_idx'] = np.argmax(W, axis=1)
     return master_df
 
@@ -101,13 +107,13 @@ if __name__ == '__main__':
 
     stop = get_stop_words()
     master_df = pd.read_pickle('pickles/master_df.pkl')
-    nmf, X = get_tfidf_transform(master_df)
+    lda, X = get_tfidf_transform(master_df)
 
-    pickle.dump(nmf, open('pickles/nmf3.pkl', 'wb'))
-    np.save(open('pickles/X3.pkl', 'wb'), X)
+    pickle.dump(lda, open('pickles/lda_tune.pkl', 'wb'))
+    np.save(open('pickles/Xlda_tune.npy', 'wb'), X)
 
-    master_df = append_topic_idx(master_df, nmf, X)
-    master_df.to_pickle('pickles/master_df3.pkl')
+    master_df = append_topic_idx(master_df, lda, X)
+    master_df.to_pickle('pickles/master_df_lda_tune.pkl')
 
     end = time()
     print('This took %s minutes' % round((end - start)/60., 2))
