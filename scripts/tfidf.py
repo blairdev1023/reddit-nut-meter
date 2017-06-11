@@ -8,6 +8,10 @@ from sklearn.decomposition import LatentDirichletAllocation as LDA
 import pickle
 from nltk.corpus import stopwords
 
+def print_time(message):
+    now = round((time() - start)/60., 2)
+    print('%s, now: %smin' % (message, now))
+
 def get_master_df():
     '''
     returns the master dataframe of comments in order of supervised-nuts,
@@ -49,30 +53,27 @@ def get_tfidf_transform(master_df):
         should be your running main dataframe
     '''
     master_df['body'] = master_df['body'].astype(str)
-    print('Vectorizing')
+    print_time('Vectorizing')
     vectorizer = TfidfVectorizer(stop_words='english',
                                  lowercase=False,
                                  max_features=10000,
                                  ngram_range=(1,2),
                                  max_df=0.8,
                                  min_df=3)
-    now = round((time() - start)/60., 2)
-    print('Fitting Vectorizer, now: %smin' % now)
+
+    print_time('Fitting Vectorizer')
     vectorizer.fit(master_df['body'].values)
-    now = round((time() - start)/60., 2)
-    print('Transforming Vector, now: %smin' % now)
+    print_time('Transforming Vector')
     X = vectorizer.transform(master_df['body'])
+    print_time('Fitting Model')
     # nmf = NMF(verbose=1, n_components=25)
     lda = LDA(n_topics=50,
-              verbose=2,
-              evaluate_entry=1,
-              max_iter=100,
+              verbose=1,
+              evaluate_every=2,
+              max_iter=20,
               n_jobs=-1)
-    now = round((time() - start)/60., 2)
-    print('Fitting Model, now: %smin' % now)
     lda.fit(X)
-    now = round((time() - start)/60., 2)
-    print('Done Fitting Model, now: %smin' % now)
+    print_time('Done Fitting Model')
     return lda, X
 
 def append_topic_idx(master_df, model, X):
@@ -89,11 +90,9 @@ def append_topic_idx(master_df, model, X):
     X - pandas dataframe or numpy array
         the same data the nmf was trained on, used for transforming
     '''
-    now = round((time() - start)/60., 2)
-    print('Transforming X, now: %s Mins' % now)
+    print_time('Transforming X')
     W = model.transform(X)
-    now = round((time() - start)/60., 2)
-    print('Appending Indicies, now: %s Mins' % now)
+    print_time('Appending Indicies')
     master_df['topic_idx'] = np.argmax(W, axis=1)
     return master_df
 

@@ -4,6 +4,7 @@ from os import listdir
 from time import time
 import matplotlib.pyplot as plt
 from math import log
+from sklearn import preprocessing
 
 def log_tai(tai):
     '''
@@ -110,11 +111,11 @@ def get_tai_tot_dicts(tai_dict, names_list):
 
     return s_n_tai_tot, s_nn_tai_tot, us_n_tai_tot, us_nn_tai_tot
 
-def get_val_dicts(type_dict, names_list):
+def get_val_dicts(type_dict, names_list, standardize=False):
     '''
     Returns 4 dictionaries. Each dictionary represents one of the 4 groups and
-    has its keys set to topic #'s' and each value is a list of the values
-    stored in the type_dict
+    has its keys set to the topic #'s and each value is a list of the values
+    stored in the type_dict.
     '''
     s_n, s_nn, us_n, us_nn = names_list
 
@@ -147,7 +148,23 @@ def get_val_dicts(type_dict, names_list):
         for j in range(len(idx)):
             us_nn_val[idx[j]].append(val[j])
 
-    return s_n_val, s_nn_val, us_n_val, us_nn_val
+    if standardize == False:
+        return s_n_val, s_nn_val, us_n_val, us_nn_val
+    #### This is the end unless standardize=True ####
+
+    master_dict = s_n_val.copy()
+    for d in [s_nn_val, us_n_val, us_nn_val]:
+        for key in master_dict.keys():
+            master_dict[key] = master_dict[key] + d[key]
+
+    s_n_val_lens = [len(s_n_val[key]) for key in sorted(s_n_val.keys())]
+    s_nn_val_lens = [len(s_nn_val[key]) for key in sorted(s_nn_val.keys())]
+    us_n_val_lens = [len(us_n_val[key]) for key in sorted(us_n_val.keys())]
+
+    for key in sorted(master_dict.keys()):
+        master_dict[key] = preprocessing.scale(master_dict[key])
+
+    return master_dict
 
 def get_mean_std_sum_dicts(type_val_dicts):
     '''
@@ -223,15 +240,15 @@ if __name__ == '__main__':
     master_df = pd.read_pickle('pickles/master_df_lda.pkl')
     score_agg_df = get_grouby_by_df(master_df)
 
-    tai_dict = get_dict(master_df, score_agg_df, 'tai')
-    # count_dict = get_dict(master_df, score_agg_df, 'count')
-    tai_val_dicts = get_val_dicts(tai_dict, names_list)
-    # count_val_dicts = get_val_dicts(count_dict, names_list)
-    tai_mean_std_sum_dicts = get_mean_std_sum_dicts(tai_val_dicts)
+    # tai_dict = get_dict(master_df, score_agg_df, 'tai')
+    count_dict = get_dict(master_df, score_agg_df, 'count')
+    # tai_val_dicts = get_val_dicts(tai_dict, names_list)
+    master_dict_stan = get_val_dicts(count_dict, names_list, standardize=True)
+    # tai_mean_std_sum_dicts = get_mean_std_sum_dicts(tai_val_dicts)
     # count_mean_std_sum_dicts = get_mean_std_sum_dicts(count_val_dicts)
-    params_dicts = get_params_dicts()
+    # params_dicts = get_params_dicts()
 
-    plot_dicts(tai_mean_std_sum_dicts, params_dicts)
+    # plot_dicts(tai_mean_std_sum_dicts, params_dicts)
     # plot_dicts(count_mean_std_sum_dicts, params_dicts)
 
     end = time()
