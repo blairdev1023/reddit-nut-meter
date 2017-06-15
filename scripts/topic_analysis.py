@@ -5,6 +5,7 @@ from time import time
 import matplotlib.pyplot as plt
 from math import log
 from sklearn import preprocessing
+from sklearn.metrics.pairwise import cosine_similarity
 
 def log_tai(tai):
     '''
@@ -157,14 +158,26 @@ def get_val_dicts(type_dict, names_list, standardize=False):
         for key in master_dict.keys():
             master_dict[key] = master_dict[key] + d[key]
 
-    s_n_val_lens = [len(s_n_val[key]) for key in sorted(s_n_val.keys())]
-    s_nn_val_lens = [len(s_nn_val[key]) for key in sorted(s_nn_val.keys())]
-    us_n_val_lens = [len(us_n_val[key]) for key in sorted(us_n_val.keys())]
-
     for key in sorted(master_dict.keys()):
         master_dict[key] = preprocessing.scale(master_dict[key])
 
-    return master_dict
+    s_n_lens = [len(s_n_val[key]) for key in sorted(s_n_val.keys())]
+    s_nn_lens = [len(s_nn_val[key]) for key in sorted(s_nn_val.keys())]
+    us_n_lens = [len(us_n_val[key]) for key in sorted(us_n_val.keys())]
+
+    s_nn_lens = [s_nn_lens[i] + s_n_lens[i] for i in range(len(s_n_val))]
+    us_n_lens = [us_n_lens[i] + s_nn_lens[i] for i in range(len(s_n_val))]
+
+    for key in s_n_val.keys():
+        s_n_val[key] = master_dict[key][:s_n_lens[key]]
+    for key in s_nn_val.keys():
+        s_nn_val[key] = master_dict[key][s_n_lens[key]:s_nn_lens[key]]
+    for key in s_nn_val.keys():
+        us_n_val[key] = master_dict[key][s_nn_lens[key]:us_n_lens[key]]
+    for key in s_nn_val.keys():
+        us_nn_val[key] = master_dict[key][us_n_lens[key]:]
+
+    return s_n_val, s_nn_val, us_n_val, us_nn_val
 
 def get_mean_std_sum_dicts(type_val_dicts):
     '''
@@ -198,55 +211,96 @@ def get_mean_std_sum_dicts(type_val_dicts):
 def get_params_dicts():
     s_n_param = {'color': 'r', 'label':'Nuts (S)'}
     s_nn_param = {'color': 'b', 'label':'Not Nuts (S)'}
-    us_n_param = {'color': 'r', 'label':'Nuts (U)', 'ls':'--'}
-    us_nn_param = {'color': 'b', 'label':'Not Nuts (U)', 'ls':'--'}
+    us_n_param = {'color': 'orange', 'label':'Nuts (U)'}
+    us_nn_param = {'color': 'purple', 'label':'Not Nuts (U)'}
     params_dicts = (s_n_param, s_nn_param, us_n_param, us_nn_param)
     return params_dicts
 
+def z_score(observation, mean, std):
+    '''
+    returns the z-score associated with the observation value given a
+    normal distribution of a known mean and standard deviation
+    '''
+    return (observation - mean) / std
+
+def get_cos_sim(mean_std_sum_dicts, val_dicts, score_agg_df):
+    '''
+    Iterates through the Nuts and Non-Nuts indivudal user topic vectors and
+    calculates the cos_sim W.R.T. both the Nut average topic vector and the
+    Non_Nut Average.
+
+    *** Note, vals_dicts needs to be unstandardized, use the the 'standardize'
+    argument in get_val_dicts
+    '''
+    nut_topic_d = mean_std_sum_dicts[0][0]
+    non_nut_topic_d = mean_std_sum_dicts[0][1]
+    nut_keys = sorted(nut_topic_d.keys())
+    non_nut_keys = sorted(non_nut_topic_d.keys())
+    nut_topic_v = np.array([nut_topic_d[key] for key in nut_keys])
+    non_nut_topic_v = np.array([non_nut_topic_d[key] for key in non_nut_keys])
+
+    s_n_val, s_nn_val, us_n_val, us_nn_val = val_dicts
+
+    all_val_dicts, mean_all, std_all = s_n_val.copy(), {}, {}
+    for d in [s_nn_val, us_n_val, us_nn_val]:
+        for key in all_val_dicts.keys():
+            all_val_dicts[key] = all_val_dicts[key] + d[key]
+
+    for key in sorted(all_val_dicts.keys()):
+        std_all[key] = np.array(all_val_dicts[key]).std()
+        mean_all[key] = np.array(all_val_dicts[key]).mean()
+
+
+    return mean_all, std_all
+
 def plot_dicts(mean_std_sum_dicts, params_dicts):
     plt.style.use('ggplot')
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(32,8))
     ax = fig.add_subplot(111)
 
     mean_dicts, std_dicts, sum_dicts = mean_std_sum_dicts
-    mean_dicts = mean_dicts[:2]
-    params_dicts = params_dicts[:2]
-    for d in mean_dicts:
-        # del d[0]
-        # del d[4]
-        del d[13]
-
+    # mean_dicts = mean_dicts[:1]
+    # std_dicts = std_dicts[:1]
+    # params_dicts = params_dicts[:1]
     zipped_dicts = zip(mean_dicts, params_dicts)
+    width = np.array([0.20 for x in range(len(mean_dicts[0]))])
 
+    i = 0
     for mean_dict, param_dict in zipped_dicts:
-        x, y = [], []
+        print(i)
+        x, y, err = [], [], []
         for key, value in mean_dict.items():
             x.append(key)
             y.append(value)
-        ax.plot(x, y, **param_dict)
+        x = np.array(x)
+        ax.bar(x + (width*i), y, width=width, ecolor='k', **param_dict)
+        i += 1
 
-    ax.set_title('Nut vs. Non-Nut Avg. T.A.I. per Topic with LDA')
+    ax.set_title('Nut vs. Non-Nut Avg. User Topic Posts with LDA (standardize)')
     ax.set_xlabel('Topic #')
-    ax.set_ylabel('T.A.I. Value')
+    ax.set_ylabel('Count')
+    ax.set_xticks([x for x in range(20)])
     plt.legend()
 
-    plt.savefig('../images/eda_log_tai.png')
+    plt.savefig('../images/eda_count_bar_lda.png')
     plt.close()
 
 if __name__ == '__main__':
     start = time()
 
     names_list = get_name_lists()
-    master_df = pd.read_pickle('pickles/master_df_lda.pkl')
+    master_df = pd.read_pickle('pickles/master_df_lda_tune.pkl')
     score_agg_df = get_grouby_by_df(master_df)
 
     # tai_dict = get_dict(master_df, score_agg_df, 'tai')
     count_dict = get_dict(master_df, score_agg_df, 'count')
     # tai_val_dicts = get_val_dicts(tai_dict, names_list)
-    master_dict_stan = get_val_dicts(count_dict, names_list, standardize=True)
+    count_val_dicts = get_val_dicts(count_dict, names_list, standardize=True)
     # tai_mean_std_sum_dicts = get_mean_std_sum_dicts(tai_val_dicts)
-    # count_mean_std_sum_dicts = get_mean_std_sum_dicts(count_val_dicts)
-    # params_dicts = get_params_dicts()
+    count_mean_std_sum_dicts = get_mean_std_sum_dicts(count_val_dicts)
+    params_dicts = get_params_dicts()
+
+    mean_all, std_all = get_cos_sim(count_mean_std_sum_dicts, count_val_dicts, score_agg_df)
 
     # plot_dicts(tai_mean_std_sum_dicts, params_dicts)
     # plot_dicts(count_mean_std_sum_dicts, params_dicts)
