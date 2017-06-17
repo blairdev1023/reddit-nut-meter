@@ -16,13 +16,13 @@ def get_wordclouds(body_arr, i=None, saveas=None):
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
     if i != None:
-        plt.savefig('../images/topic%s.png' % i)
+        plt.savefig('../images/lda_round1/topic%s.png' % i)
         plt.close()
     elif type(saveas) == str:
-        plt.savefig('../images/%s.png' % saveas)
+        plt.savefig('../images/lda_round1/%s.png' % saveas)
         plt.close()
     else:
-        plt.savefig('../images/temp.png' % saveas)
+        plt.savefig('../images/lda_round1/temp.png' % saveas)
         plt.close()
 
 def get_stop_words():
@@ -32,8 +32,17 @@ def get_stop_words():
 
 if __name__ == '__main__':
     stop = get_stop_words()
+<<<<<<< HEAD
     master_df = pd.read_pickle('pickles/masters/master_df__6_15__nmf__100.pkl')
 
     body_arr = master_df[master_df['topic_idx'] == 29]['body'].values
     # print('working on topic %s' % i)
     get_wordclouds(body_arr, 29)
+=======
+    master_df = pd.read_pickle('pickles/master_df_lda_tune.pkl')
+
+    for i in range(20):
+        body_arr = master_df[master_df['topic_idx'] == i]['body'].values
+        print('working on topic %s' % i)
+        get_wordclouds(body_arr, i)
+>>>>>>> 373ba0f8d36ecebf6b0a3f397e64028dc8ddf8df
