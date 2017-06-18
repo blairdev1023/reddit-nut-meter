@@ -4,6 +4,11 @@ import numpy as np
 import re
 from time import time
 
+def print_time(message):
+    now = time() - start
+    now = round(now % 60 + (now - now % 60), 2)
+    print('%s, now: %sm%ss' % (message, round(now // 60), round(now % 60)))
+
 def get_user(name):
     '''
     returns a redditor object
@@ -19,8 +24,7 @@ def comment_scrape(user, direct, nut=False):
 
     user - user object (not a string this time)
     direct - string
-        'sup' - saves data in the data/sup directory
-        'un_sup' - saves data in the data/un_sup directory
+        saves to data/<direct>
     nut - bool
         if False, saves data in data/<direct>/not_nuts directory
         if True, saves data in data/<direct>/nuts directory
@@ -35,30 +39,10 @@ def comment_scrape(user, direct, nut=False):
                           ])
     df =  pd.DataFrame(data=comms_list,
                        columns = ['name', 'body', 'score', 'sub'])
-    if (direct == 'sup') & (nut == False):
-        df.to_csv('../data/sup/not_nuts/%s.csv' % user.name, index=False)
-    elif (direct == 'sup') & (nut == True):
-        df.to_csv('../data/sup/nuts/%s.csv' % user.name, index=False)
-    elif (direct == 'un_sup') & (nut == False):
-        df.to_csv('../data/un_sup/not_nuts/%s.csv' % user.name, index=False)
-    elif (direct == 'un_sup') & (nut == True):
-        df.to_csv('../data/un_sup/nuts/%s.csv' % user.name, index=False)
-    else:
-        print('directory of \'sup\' or \'un_sup\' not specified, did not save')
-
-def get_user_comments(user):
-    '''
-    returns a pandas df of the user comments
-    the user must have already been scraped and saved as this method
-    loads the data from the csv saved in /data
-
-    user - user object (not a string this time)
-    direct - string
-        'sup' - sends this data to the data/sup/ directory
-        'un_sup' - sends this data to the data/un_sup directory
-    '''
-    df = pd.read_csv('../data/%s.csv' % user.name)
-    return df
+    if nut == True:
+        df.to_csv('../data/%s/nuts/%s.csv' % (direct, user.name), index=False)
+    elif nut == False:
+        df.to_csv('../data/%s/not_nuts/%s.csv' % (direct, user.name), index=False)
 
 def clean_body(text):
     '''
@@ -233,6 +217,25 @@ def supervised_not_nuts_scrape():
         user = get_user(name[0])
         comment_scrape(user, 'sup', nut=False)
 
+def new_nuts_scrape():
+    '''
+    Scrapes the comments from the users below and puts them into a csv located in ../data/new/nut or ../data/new/not_nuts
+    '''
+    new_nuts = ['donkey_democrat', 'daspoulos', 'Jacko647',
+                'jakefromstatefarm10', 'Lolercausted', 'Jorpba_Lord_of_Slime',
+                'Rex9', 'existentialhack', 'TerriChris', 'SkorchZang']
+
+    new_not_nuts = ['EtTuTortilla', 'ojchahine6', 'redheaddomination',
+                    'Yakkahboo', 'thedugong', 'ImHereForTheKills', 'nanotaxi2',
+                    'born_again_tim', 'beelzebubs_avocado', 'Annepackrat']
+
+    for name in new_nuts:
+        user = get_user(name)
+        comment_scrape(user, 'test', nut=True)
+    for name in new_not_nuts:
+        user = get_user(name)
+        comment_scrape(user, 'test', nut=False)
+
 if __name__ == '__main__':
     USERNAME = 'imnotanotherbot'
     USER_AGENT = 'getting comments' # put whatever here
@@ -249,6 +252,7 @@ if __name__ == '__main__':
 
     print('starting...')
     start = time()
-    unsupervised_not_nuts_scrape()
-    end = time()
-    print('This took %s minutes' % round(float(end - start)/60, 2))
+
+    new_nuts_scrape()
+
+    print_time('Done')
