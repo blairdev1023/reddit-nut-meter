@@ -8,8 +8,11 @@ from sklearn.ensemble import AdaBoostClassifier as ABC
 from sklearn.ensemble import GradientBoostingClassifier as GBC
 from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report as class_report
+from sklearn.metrics import confusion_matrix
 import pickle
+import matplotlib.pyplot as plt
+from ModelThreshold import ModelThreshold
 
 def z_score(observation, mean, std):
     '''
@@ -282,33 +285,6 @@ def pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics):
 
     return y_probs_nmf, y_probs_lda
 
-def model_class_reports(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda):
-    '''
-
-    '''
-    nmf_abc_y_prob, nmf_gbc_y_prob, nmf_rfc_y_prob = y_probs_nmf
-    lda_abc_y_prob, lda_gbc_y_prob, lda_rfc_y_prob = y_probs_lda
-    nmf_y_test = list(load_split(topic_dfs_nmf))[3]
-    lda_y_test = list(load_split(topic_dfs_lda))[3]
-
-    thresholds = np.arange(0,1.1,0.1)
-
-    for i in thresholds:
-        print('\n\n%s' % i)
-        print('nmf')
-        nmf_abc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_abc_y_prob]
-        nmf_gbc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_gbc_y_prob]
-        nmf_rfc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_rfc_y_prob]
-        print(classification_report(nmf_y_test, nmf_abc_y_pred, digits=3))
-        print(classification_report(nmf_y_test, nmf_gbc_y_pred, digits=3))
-        print(classification_report(nmf_y_test, nmf_rfc_y_pred, digits=3))
-        print('lda')
-        lda_abc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_abc_y_prob]
-        lda_gbc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_gbc_y_prob]
-        lda_rfc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_rfc_y_prob]
-        print(classification_report(lda_y_test, lda_abc_y_pred, digits=3))
-        print(classification_report(lda_y_test, lda_gbc_y_pred, digits=3))
-        print(classification_report(lda_y_test, lda_rfc_y_pred, digits=3))
 
 if __name__ == '__main__':
     start = time()
@@ -326,6 +302,9 @@ if __name__ == '__main__':
 
     y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics)
 
-    model_class_reports(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda)
+    mt = ModelThreshold(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda)
+    # mt.show_class_report()
+    mt.confusion_terms(terms=['tpr', 'tnr', 'ppv', 'fnr', 'fpr', 'f1'])
+
 
     print_time('Done', start)
