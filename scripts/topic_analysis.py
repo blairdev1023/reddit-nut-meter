@@ -1,252 +1,331 @@
+import sys
+from os import listdir
 import pandas as pd
 import numpy as np
-from os import listdir
 from time import time
-import matplotlib.pyplot as plt
-from math import log
-from sklearn import preprocessing
-from sklearn.metrics.pairwise import cosine_similarity
+from topic_modeling import print_time
+from sklearn.ensemble import AdaBoostClassifier as ABC
+from sklearn.ensemble import GradientBoostingClassifier as GBC
+from sklearn.ensemble import RandomForestClassifier as RFC
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report
+import pickle
 
-def get_grouby_by_df(master_df):
+def z_score(observation, mean, std):
     '''
-    takes the master_df and groups on name first and then topic #. After that,
-    the groupby is aggregated into a new df on count and sum.
-    '''
-    gb = master_df.groupby(['name', 'topic_idx'])
-    score_agg_df = gb['score'].aggregate(['count', 'sum'])
-    return score_agg_df
+    Calculates the z-score associated with the observation value given a
+    normal distribution of a known mean and standard deviation
 
-def get_dict(master_df, score_agg_df, col):
+    Returns: z_score
     '''
-    returns a dictionary that has has all the names as keys as each value
-    is a tuple of 2 entries. First being the topic #'s in a list and the second
-    is another list of those topic #'s col for that user
+    return (observation - mean) / std
+
+def load_split(topic_dfs_model):
     '''
-    d = {}
-    names_set = set(master_df['name'].values.tolist())
-    for name in names_set:
-        name_df = score_agg_df.loc[name]
-        value = (name_df.index.tolist(), name_df[col].values.tolist())
-        d[name] = value
-    return d
+    Loads and splits data by nmf/lda, y/X, train/test in that order.
+
+    Returns: X_train, y_train, X_test, y_test
+    '''
+    topic_df_train, topic_df_test = topic_dfs_model
+    df_train, df_test = topic_df_train.copy(), topic_df_test.copy()
+    y_train = df_train.pop('is_nut').values
+    y_test = df_test.pop('is_nut').values
+    X_train, X_test = df_train.values, df_test.values
+
+    return X_train, y_train, X_test, y_test
 
 def get_name_lists():
     '''
-    returns 4 lists. Each one has the names of belonging to each group
+    Returns 6 lists. Each one has the names of belonging to each group
     '''
     s_n = listdir('../data/sup/nuts')
     s_nn = listdir('../data/sup/not_nuts')
     us_n = listdir('../data/un_sup/nuts')
     us_nn = listdir('../data/un_sup/not_nuts')
-
-    # removes non .csv files
-    s_n.remove('users.txt')
-    s_n.remove('user_info.txt')
-    s_nn.remove('users.txt')
+    t_n = listdir('../data/test/nuts')
+    t_nn = listdir('../data/test/not_nuts')
 
     # removes .csv extension
     s_n = list(map(lambda x: x[:-4], s_n))
     s_nn = list(map(lambda x: x[:-4], s_nn))
     us_n = list(map(lambda x: x[:-4], us_n))
     us_nn = list(map(lambda x: x[:-4], us_nn))
+    t_n = list(map(lambda x: x[:-4], t_n))
+    t_nn = list(map(lambda x: x[:-4], t_nn))
 
-    return s_n, s_nn, us_n, us_nn
+    for l in [s_n, s_nn, us_n, us_nn, t_n, t_nn]:
+        if '.DS_S' in l:
+            l.remove('.DS_S')
 
-def get_val_dicts(type_dict, names_list, n_topics, standardize=False):
+    return s_n, s_nn, us_n, us_nn, t_n, t_nn
+
+def get_master_dfs(n_topics, names_lists):
     '''
-    Returns 4 dictionaries. Each dictionary represents one of the 4 groups and
-    has its keys set to the topic #'s and each value is a list of the values
-    stored in the type_dict.
+    Unpickles master_dfs for both models. Each being a tuple of the
+    training df and a testing df for that model.
+
+    Returns: master_dfs_nmf, master_dfs_lda
     '''
-    # make dicts for values tally per topic
-    s_n, s_nn, us_n, us_nn = names_list
+    print_time('Getting Master DataFrames', start)
 
-    s_n_val = {x:[] for x in range(n_topics)}
-    s_nn_val = {x:[] for x in range(n_topics)}
-    us_n_val = {x:[] for x in range(n_topics)}
-    us_nn_val = {x:[] for x in range(n_topics)}
+    nmf_dir = 'pickles/nmf/%s_topics/' % n_topics
+    lda_dir = 'pickles/lda/%s_topics/' % n_topics
+    master_df_nmf_train = pd.read_pickle(nmf_dir + 'master_df_train.pkl')
+    master_df_nmf_test = pd.read_pickle(nmf_dir + 'master_df_test.pkl')
+    master_df_lda_train = pd.read_pickle(lda_dir + 'master_df_train.pkl')
+    master_df_lda_test = pd.read_pickle(lda_dir + 'master_df_test.pkl')
 
-    # append each groups' user's values by topic
-    for name in s_n:
-        idx = type_dict[name][0]
-        val = type_dict[name][1]
-        for j in range(len(idx)):
-            s_n_val[idx[j]].append(val[j])
+    s_n, s_nn, us_n, us_nn, t_n, t_nn = names_lists
+    mask_nmf = master_df_nmf_train['name'].apply(lambda x:
+                                                   (x in s_n) | (x in s_nn))
+    mask_lda = master_df_lda_train['name'].apply(lambda x:
+                                                   (x in s_n) | (x in s_nn))
+    master_df_nmf_train = master_df_nmf_train[mask_nmf]
+    master_df_lda_train = master_df_lda_train[mask_lda]
 
-    for name in s_nn:
-        idx = type_dict[name][0]
-        val = type_dict[name][1]
-        for j in range(len(idx)):
-            s_nn_val[idx[j]].append(val[j])
+    master_dfs_nmf = (master_df_nmf_train, master_df_nmf_test)
+    master_dfs_lda = (master_df_lda_train, master_df_lda_test)
 
-    for name in us_n:
-        idx = type_dict[name][0]
-        val = type_dict[name][1]
-        for j in range(len(idx)):
-            us_n_val[idx[j]].append(val[j])
+    return master_dfs_nmf, master_dfs_lda
 
-    for name in us_nn:
-        idx = type_dict[name][0]
-        val = type_dict[name][1]
-        for j in range(len(idx)):
-            us_nn_val[idx[j]].append(val[j])
-
-    if standardize == False:
-        return s_n_val, s_nn_val, us_n_val, us_nn_val
-    #### This is the end unless standardize=True ####
-
-    # standardize by topic, regardless of group
-    master_dict = s_n_val.copy()
-    for d in [s_nn_val, us_n_val, us_nn_val]:
-        for key in master_dict.keys():
-            master_dict[key] = master_dict[key] + d[key]
-
-    for key in sorted(master_dict.keys()):
-        master_dict[key] = preprocessing.scale(master_dict[key])
-
-    # re-parse out standardized values using indicies of varying size
-    s_n_lens = [len(s_n_val[key]) for key in sorted(s_n_val.keys())]
-    s_nn_lens = [len(s_nn_val[key]) for key in sorted(s_nn_val.keys())]
-    us_n_lens = [len(us_n_val[key]) for key in sorted(us_n_val.keys())]
-
-    s_nn_lens = [s_nn_lens[i] + s_n_lens[i] for i in range(len(s_n_val))]
-    us_n_lens = [us_n_lens[i] + s_nn_lens[i] for i in range(len(s_n_val))]
-
-    for key in s_n_val.keys():
-        s_n_val[key] = master_dict[key][:s_n_lens[key]]
-    for key in s_nn_val.keys():
-        s_nn_val[key] = master_dict[key][s_n_lens[key]:s_nn_lens[key]]
-    for key in s_nn_val.keys():
-        us_n_val[key] = master_dict[key][s_nn_lens[key]:us_n_lens[key]]
-    for key in s_nn_val.keys():
-        us_nn_val[key] = master_dict[key][us_n_lens[key]:]
-
-    return s_n_val, s_nn_val, us_n_val, us_nn_val
-
-def get_mean_dicts(type_val_dicts):
+def get_grouby_by_dfs(master_dfs_model):
     '''
-    Returns 3 tuples, each containing 4 dictionaries. Each dictionary
-    represents one of the 4 groups and has the key set to a topic # and each
-    value to be the type mean/std/count depending on which tuple is examined
+    Takes the training and testing dfs from master_dfs_model and aggregates the
+    comment count per topic for each user. The returned dfs are indexed by name
+    and have columns 'topic_idx' and 'count'.
+
+    Returns: score_agg_df_train, score_agg_df_test
     '''
-    s_n_val, s_nn_val, us_n_val, us_nn_val = type_val_dicts
+    print_time('Getting Group-By', start)
 
-    s_n_mean = {x: np.array(y).mean() for x, y in s_n_val.items()}
-    s_nn_mean = {x: np.array(y).mean() for x, y in s_nn_val.items()}
-    us_n_mean = {x: np.array(y).mean() for x, y in us_n_val.items()}
-    us_nn_mean = {x: np.array(y).mean() for x, y in us_nn_val.items()}
+    master_df_train, master_df_test = master_dfs_model
+    gb_train = master_df_train.groupby(['name', 'topic_idx'])
+    gb_test = master_df_test.groupby(['name', 'topic_idx'])
+    score_agg_df_train = gb_train['score'].aggregate(['count'])
+    score_agg_df_test = gb_test['score'].aggregate(['count'])
 
-    return s_n_mean, s_nn_mean, us_n_mean, us_nn_mean
+    return score_agg_df_train, score_agg_df_test
 
-def get_param_dicts():
-    model_spread = get_model_spread(count_mean_dicts_nmf, count_mean_dicts_lda)
-    nmf_sum, lda_sum = model_spread
-
-    nmf_param = {'color': 'k',
-                 'label': 'NMF, Spread per Topic: %s' % nmf_sum}
-    lda_param = {'color': 'white', 'hatch': '//', 'edgecolor': 'k',
-                 'label': 'LDA, Spread per Topic: %s' % lda_sum}
-
-    return nmf_param, lda_param
-
-def get_cos_sim(mean_std_sum_dicts, val_dicts, score_agg_df):
+def standardize_gb(score_agg_dfs, n_topics, names_lists):
     '''
-    Iterates through the Nuts and Non-Nuts indivudal user topic vectors and
-    calculates the cos_sim W.R.T. both the Nut average topic vector and the
-    Non_Nut Average.
+    Standardizes the counts per topic for the training data and testing data
+    seperately. The dfs returned have the names as indicies, topic indicies as
+    columns, and the values are that users standardized count in that topic.
+    Last column that is appeneded is 'is_nut', with a 1 if True.
 
-    *** Note, vals_dicts needs to be unstandardized, use the the 'standardize'
-    argument in get_val_dicts
+    Returns: topic_df_train, topic_df_test
     '''
-    nut_topic_d = mean_std_sum_dicts[0][0]
-    non_nut_topic_d = mean_std_sum_dicts[0][1]
-    nut_keys = sorted(nut_topic_d.keys())
-    non_nut_keys = sorted(non_nut_topic_d.keys())
-    nut_topic_v = np.array([nut_topic_d[key] for key in nut_keys])
-    non_nut_topic_v = np.array([non_nut_topic_d[key] for key in non_nut_keys])
+    start_func = time()
+    # get standardized data
+    print_time('Standardizing', start)
+    score_agg_df_train, score_agg_df_test = score_agg_dfs
+    df_train, df_test = score_agg_df_train.copy(), score_agg_df_test.copy()
 
-    s_n_val, s_nn_val, us_n_val, us_nn_val = val_dicts
+    topic_agg = np.zeros((n_topics, 2))
+    for i in range(n_topics):
+        topic_agg[i, 0] = df_train.loc(axis=0)[:,i].mean()
+        topic_agg[i, 1] = df_train.loc(axis=0)[:,i].std()
 
-    all_val_dicts, mean_all, std_all = s_n_val.copy(), {}, {}
-    for d in [s_nn_val, us_n_val, us_nn_val]:
-        for key in all_val_dicts.keys():
-            all_val_dicts[key] = all_val_dicts[key] + d[key]
+    for idx in df_train.index:
+        mean, std = topic_agg[idx[1]]
+        df_train.loc[idx] = z_score(df_train.loc[idx], mean, std)
+    for idx in df_test.index:
+        mean, std = topic_agg[idx[1]]
+        df_test.loc[idx] = z_score(df_test.loc[idx], mean, std)
 
-    for key in sorted(all_val_dicts.keys()):
-        std_all[key] = np.array(all_val_dicts[key]).std()
-        mean_all[key] = np.array(all_val_dicts[key]).mean()
+    # make dataframes of names vs. topic (topic_df)
+    print_time('Done Standarding, That Took', start_func)
+    print_time('Making Topic DataFrame', start)
+    names_train = df_train.index.get_level_values(0).unique().tolist()
+    names_test = df_test.index.get_level_values(0).unique().tolist()
+    topic_data_train = np.zeros((len(names_train), n_topics))
+    topic_data_test = np.zeros((len(names_test), n_topics))
 
+    for i in range(len(names_train)):
+        for idx in df_train.loc[names_train[i]].index:
+            topic_data_train[i, idx] = df_train.loc[(names_train[i], idx)]
+    for i in range(len(names_test)):
+        for idx in df_test.loc[names_test[i]].index:
+            topic_data_test[i, idx] = df_test.loc[(names_test[i], idx)]
 
-    return mean_all, std_all
+    topic_df_train = pd.DataFrame(data=topic_data_train, index=names_train)
+    topic_df_test = pd.DataFrame(data=topic_data_test, index=names_test)
 
-def get_model_spread(nmf_dicts, lda_dicts):
-    s_n_nmf, s_nn_nmf, us_n_nmf, us_nn_nmf = nmf_dicts
-    s_n_lda, s_nn_lda, us_n_lda, us_nn_lda = lda_dicts
+    # labeling nuts
+    topic_df_train['is_nut'] = np.zeros(len(names_train))
+    topic_df_test['is_nut'] = np.zeros(len(names_test))
+    for name in names_lists[0]:
+        topic_df_train.loc[name]['is_nut'] = 1.0
+    for name in names_lists[4]:
+        topic_df_test.loc[name]['is_nut'] = 1.0
 
-    plot_dict_nmf = {key: s_n_nmf[key]-s_nn_nmf[key] for key in s_n_nmf.keys()}
-    plot_dict_lda = {key: s_n_lda[key]-s_nn_lda[key] for key in s_n_lda.keys()}
+    return topic_df_train, topic_df_test
 
-    nmf_vals = list(map(lambda x: abs(x), list(plot_dict_nmf.values())))
-    lda_vals = list(map(lambda x: abs(x), list(plot_dict_lda.values())))
-    nmf_sum = round(np.array(nmf_vals).mean(), 2)
-    lda_sum = round(np.array(lda_vals).mean(), 2)
+def model_gridsearch(topic_dfs_model):
+    '''
+    Takes the topic_dfs and splits them into X & y. Then using X_train and
+    y_train GridSearchs over an AdaBoostClassifier, GradientBoostingClassifier,
+    and RandomForestClassifier with their respective paramaters. Returns fitted
+    GridSearch objects.
 
-    return nmf_sum, lda_sum
+    Not used in normal if_name_main block because GS objects were pickled in
+    script and then the saving part of the code was deleted. Not needed since
+    pickles exist.
 
-def plot_dicts(mean_dicts, params_dict, place=0):
-    x, y = [], []
-    s_n_mean, s_nn_mean, us_n_mean, us_nn_mean = mean_dicts
-    plot_dict = {key: s_n_mean[key]-s_nn_mean[key] for key in s_n_mean.keys()}
-    for item in sorted(list(plot_dict.items())):
-        x.append(item[0])
-        y.append(item[1])
+    Returns: gs_abc, gs_gbc, gs_rfc
+    '''
+    print_time('Starting GridSearch', start)
+    topic_df_train, topic_df_test = topic_dfs_model
+    y_train = topic_df_train.pop('is_nut').values
+    y_test = topic_df_test.pop('is_nut').values
+    X_train, X_test = topic_df_train.values, topic_df_test.values
 
-    x = np.array(x)
-    width = 0.4
-    ax.bar(x + (width * place), y, width=width, **params_dict)
+    abc = ABC()
+    gbc = GBC()
+    rfc = RFC()
+    params_abc = {'n_estimators': [50, 100, 150],
+                  'learning_rate': [0.01, 0.1, 0.5, 1.0]}
+    params_gbc = {'n_estimators': [200, 250, 300, 350],
+                  'learning_rate': [0.01, 0.1, 0.5, 1.0],
+                  'max_depth': [2, 3],
+                  'subsample': [0.05, 0.1, 0.5, 0.75, 1.0],
+                  'max_features': ['auto', 'sqrt', 'log2']}
+    params_rfc = {'n_estimators': [200, 250, 300, 350],
+                  'max_features': ['auto', 'sqrt', 'log2']}
+    gs_abc = GridSearchCV(abc, params_abc)
+    gs_gbc = GridSearchCV(gbc, params_gbc)
+    gs_rfc = GridSearchCV(rfc, params_rfc)
 
-    ax.set_title('NMF vs. LDA Nut Avg. Count Difference')
-    ax.set_xlabel('Topic #')
-    ax.set_ylabel('Count Difference (standardized)')
-    ax.set_xticks(x)
+    grids = {'abc': gs_abc, 'gbc': gs_gbc, 'rfc': gs_rfc}
 
-def end_fig(save_dir):
-    plt.legend()
-    plt.savefig(save_dir)
-    plt.close()
+    for key in grids.keys():
+        start_func = time()
+        print_time('Starting %s GridSearch' % key, start)
+        grids[key].fit(X_train, y_train)
+        print_time('Done Searching for %s' % key, start_func)
+
+    return gs_abc, gs_gbc, gs_rfc
+
+def model_fit(topic_dfs_nmf, topic_dfs_lda, n_topics):
+    '''
+    Loads this script's n_topics GridSearch pickles. Using the GridSearch
+    best_params_ attribute makes three models for nmf and lda. Those models are
+    an ABC, GBC, and RFC. They are fitted with their respective training data
+    and all models are pickled.
+    '''
+    print_time('Fitting and Saving Models')
+    nmf_X_train, nmf_y_train = list(load_split(topic_dfs_nmf))[:2]
+    lda_X_train, lda_y_train = list(load_split(topic_dfs_lda))[:2]
+
+    # load GS objects
+    nmf_dir = 'pickles/nmf/%s_topics/' % n_topics
+    nmf_gs_abc = pickle.load(open(nmf_dir + 'gs_abc.pkl', 'rb'))
+    nmf_gs_gbc = pickle.load(open(nmf_dir + 'gs_gbc.pkl', 'rb'))
+    nmf_gs_rfc = pickle.load(open(nmf_dir + 'gs_rfc.pkl', 'rb'))
+    lda_dir = 'pickles/lda/%s_topics/' % n_topics
+    lda_gs_abc = pickle.load(open(lda_dir + 'gs_abc.pkl', 'rb'))
+    lda_gs_gbc = pickle.load(open(lda_dir + 'gs_gbc.pkl', 'rb'))
+    lda_gs_rfc = pickle.load(open(lda_dir + 'gs_rfc.pkl', 'rb'))
+
+    # instantiates, fits, and saves models
+    nmf_abc = ABC(**nmf_gs_abc.best_params_)
+    nmf_gbc = GBC(**nmf_gs_gbc.best_params_)
+    nmf_rfc = RFC(**nmf_gs_rfc.best_params_)
+    lda_abc = ABC(**lda_gs_abc.best_params_)
+    lda_gbc = GBC(**lda_gs_gbc.best_params_)
+    lda_rfc = RFC(**lda_gs_rfc.best_params_)
+
+    nmf_abc.fit(nmf_X_train, nmf_y_train)
+    nmf_gbc.fit(nmf_X_train, nmf_y_train)
+    nmf_rfc.fit(nmf_X_train, nmf_y_train)
+    lda_abc.fit(lda_X_train, lda_y_train)
+    lda_gbc.fit(lda_X_train, lda_y_train)
+    lda_rfc.fit(lda_X_train, lda_y_train)
+
+    pickle.dump(nmf_abc, open(nmf_dir + 'model_abc.pkl', 'wb'))
+    pickle.dump(nmf_gbc, open(nmf_dir + 'model_gbc.pkl', 'wb'))
+    pickle.dump(nmf_rfc, open(nmf_dir + 'model_rfc.pkl', 'wb'))
+    pickle.dump(lda_abc, open(lda_dir + 'model_abc.pkl', 'wb'))
+    pickle.dump(lda_gbc, open(lda_dir + 'model_gbc.pkl', 'wb'))
+    pickle.dump(lda_rfc, open(lda_dir + 'model_rfc.pkl', 'wb'))
+
+def pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics):
+    '''
+    Loads this script's n_topics abc/gbc/rfc model pickles. Returns predict_proba of each model using either nmf or lda X_test.
+
+    Returns: y_probs_nmf, y_probs_lda
+    '''
+    print_time('Predicting Probabilities', start)
+
+    nmf_dir = 'pickles/nmf/%s_topics/' % n_topics
+    nmf_abc = pickle.load(open(nmf_dir + 'model_abc.pkl', 'rb'))
+    nmf_gbc = pickle.load(open(nmf_dir + 'model_gbc.pkl', 'rb'))
+    nmf_rfc = pickle.load(open(nmf_dir + 'model_rfc.pkl', 'rb'))
+    lda_dir = 'pickles/lda/%s_topics/' % n_topics
+    lda_abc = pickle.load(open(lda_dir + 'model_abc.pkl', 'rb'))
+    lda_gbc = pickle.load(open(lda_dir + 'model_gbc.pkl', 'rb'))
+    lda_rfc = pickle.load(open(lda_dir + 'model_rfc.pkl', 'rb'))
+
+    nmf_X_test = list(load_split(topic_dfs_nmf))[2]
+    lda_X_test = list(load_split(topic_dfs_lda))[2]
+
+    # get probabilities
+    nmf_abc_y_prob = nmf_abc.predict_proba(nmf_X_test)
+    nmf_gbc_y_prob = nmf_gbc.predict_proba(nmf_X_test)
+    nmf_rfc_y_prob = nmf_rfc.predict_proba(nmf_X_test)
+    lda_abc_y_prob = lda_abc.predict_proba(lda_X_test)
+    lda_gbc_y_prob = lda_gbc.predict_proba(lda_X_test)
+    lda_rfc_y_prob = lda_rfc.predict_proba(lda_X_test)
+
+    y_probs_nmf = (nmf_abc_y_prob, nmf_gbc_y_prob, nmf_rfc_y_prob)
+    y_probs_lda = (lda_abc_y_prob, lda_gbc_y_prob, lda_rfc_y_prob)
+
+    return y_probs_nmf, y_probs_lda
+
+def model_class_reports(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda):
+    '''
+
+    '''
+    nmf_abc_y_prob, nmf_gbc_y_prob, nmf_rfc_y_prob = y_probs_nmf
+    lda_abc_y_prob, lda_gbc_y_prob, lda_rfc_y_prob = y_probs_lda
+    nmf_y_test = list(load_split(topic_dfs_nmf))[3]
+    lda_y_test = list(load_split(topic_dfs_lda))[3]
+
+    thresholds = np.arange(0,1.1,0.1)
+
+    for i in thresholds:
+        print('\n\n%s' % i)
+        print('nmf')
+        nmf_abc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_abc_y_prob]
+        nmf_gbc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_gbc_y_prob]
+        nmf_rfc_y_pred  = [1 if prob[1] > i else 0 for prob in nmf_rfc_y_prob]
+        print(classification_report(nmf_y_test, nmf_abc_y_pred, digits=3))
+        print(classification_report(nmf_y_test, nmf_gbc_y_pred, digits=3))
+        print(classification_report(nmf_y_test, nmf_rfc_y_pred, digits=3))
+        print('lda')
+        lda_abc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_abc_y_prob]
+        lda_gbc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_gbc_y_prob]
+        lda_rfc_y_pred  = [1 if prob[1] > i else 0 for prob in lda_rfc_y_prob]
+        print(classification_report(lda_y_test, lda_abc_y_pred, digits=3))
+        print(classification_report(lda_y_test, lda_gbc_y_pred, digits=3))
+        print(classification_report(lda_y_test, lda_rfc_y_pred, digits=3))
 
 if __name__ == '__main__':
     start = time()
 
-    names_list = get_name_lists()
-    dir_nmf = 'pickles/masters/master_df__6_15__nmf__25.pkl'
-    dir_lda = 'pickles/masters/master_df__6_15__lda__25.pkl'
-    master_df_nmf = pd.read_pickle(dir_nmf)
-    master_df_lda = pd.read_pickle(dir_lda)
-    n_topics = master_df_lda['topic_idx'].nunique()
+    n_topics = int(sys.argv[1])
+    names_lists = get_name_lists()
 
-    score_agg_df_nmf = get_grouby_by_df(master_df_nmf)
-    score_agg_df_lda = get_grouby_by_df(master_df_lda)
+    master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
 
-    count_dict_nmf = get_dict(master_df_nmf, score_agg_df_nmf, 'count')
-    count_dict_lda = get_dict(master_df_lda, score_agg_df_lda, 'count')
+    score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
+    score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
 
-    count_val_dicts_nmf = get_val_dicts(count_dict_nmf, names_list,
-                                        n_topics, standardize=True)
-    count_val_dicts_lda = get_val_dicts(count_dict_lda, names_list,
-                                        n_topics, standardize=True)
+    topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
+    topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
 
-    count_mean_dicts_nmf = get_mean_dicts(count_val_dicts_nmf)
-    count_mean_dicts_lda = get_mean_dicts(count_val_dicts_lda)
+    y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics)
 
-    nmf_param, lda_param = get_param_dicts()
+    model_class_reports(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda)
 
-    plt.style.use('ggplot')
-    fig = plt.figure(figsize=(14,7))
-    ax = fig.add_subplot(111)
-    plot_dicts(count_mean_dicts_nmf, nmf_param)
-    plot_dicts(count_mean_dicts_lda, lda_param, place=1)
-    end_fig('../images/eda__6_15__diff__25.png')
-
-    end = time()
-    print('This took %s minutes' % round((end - start)/60., 2))
+    print_time('Done', start)
