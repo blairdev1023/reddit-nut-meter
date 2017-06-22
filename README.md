@@ -5,7 +5,7 @@ Using NLP techniques and Machine Learning algorithms, this proof-of-concept proj
 
 **Due to the nature of this study, some of this material could be offensive to some readers.**
 
------
+---
 
 Reddit.com is an online forum where users can discuss whichever topics they wish in small groups called 'subreddits.' A popular website, 4th largest in the [United States](http://www.alexa.com/topsites/countries/US), that has been plagued by [radical groups](https://www.washingtonpost.com/news/the-intersect/wp/2015/06/10/these-are-the-5-subreddits-reddit-banned-under-its-game-changing-anti-harassment-policy-and-why-it-banned-them/) over its lifetime. Lately you can see how [certain subreddits](https://www.reddit.com/r/uncensorednews/comments/6eewxz/migrants_caught_stealing_flowers_soft_toys_from/) have been responding to recent events in global politics. Beyond a security standpoint, there is motivation to profile these people for the sake of other users on Reddit. I don't like discussing politics with Neo-Nazis. If someone supports domestic abuse, I don't want their opinion on PC parts. So anyone who is a 'nut' is someone I'd like to avoid on this website.
 
@@ -60,4 +60,8 @@ In order to get a computer to make sense of the comments we need to do three thi
 
 ### Cleaning
 
-Using regex, most of the punctuation was stripped from the comments and several contractions were translated. One noteworthy bit of punctuation that was kept was the use of triple parentheses. In white nationalist groups, the use of triple parentheses around a name or group of people is a way to tell other forum-goers that this person is a jew. [Example 1](https://www.reddit.com/r/PoliticalHumor/comments/6h8nnb/the_muslim_ban/dixede1/?context=3), [Example 2 (title)](https://www.reddit.com/r/WhiteRights/comments/5auxfm/who_opened_the_borders_jews_plotted_and/). 
+Using regex, most of the punctuation was stripped from the comments and several contractions were translated. One noteworthy bit of punctuation that was kept was the use of triple parentheses. In white nationalist groups, the use of triple parentheses around a name or group of people is a way to tell other forum-goers that this person is a jew. [Example 1](https://www.reddit.com/r/PoliticalHumor/comments/6h8nnb/the_muslim_ban/dixede1/?context=3), [Example 2 (title)](https://www.reddit.com/r/WhiteRights/comments/5auxfm/who_opened_the_borders_jews_plotted_and/).
+
+### Vectorizing
+
+This part has to do with transforming the words in the comment into numbers a computer can interpret. This was done with two competing methods. Each of the two vectorizers were used in different topic modeling algorithms. 
