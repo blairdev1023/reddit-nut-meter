@@ -304,7 +304,7 @@ if __name__ == '__main__':
 
     mt = ModelThreshold(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda)
     # mt.show_class_report()
-    mt.confusion_terms(terms=['tpr', 'tnr', 'ppv', 'fnr', 'fpr', 'f1'])
+    mt.confusion_terms(terms=['fpr', 'tpr', 'ppv', 'f1'])
 
 
     print_time('Done', start)

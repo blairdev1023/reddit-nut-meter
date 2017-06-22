@@ -18,7 +18,7 @@ class ModelThreshold(object):
         self.nm_X_train,self.nm_y_train,self.nm_X_test,self.nm_y_test = t_d_n
         self.ld_X_train,self.ld_y_train,self.ld_X_test,self.ld_y_test = t_d_l
 
-        self.thresholds = np.arange(0,1.05,0.05)
+        self.thresholds = np.arange(0.30, 0.75, 0.05)
 
     def load_split(self, topic_dfs_model):
         '''
@@ -62,7 +62,7 @@ class ModelThreshold(object):
 
     def confusion_terms(self, terms=None):
         '''
-
+        Makes dataframes for each predictive model. Columns are 'tn','fp','fn','tp' and whatever is specified in terms. 
         '''
 
         columns = ['threshold','tn','fp','fn','tp']
@@ -96,7 +96,7 @@ class ModelThreshold(object):
                      'ppv': lambda x: x.loc['tp']/(x.loc['tp'] + x.loc['fp']),
                      'fnr': lambda x: x.loc['fn']/(x.loc['fn'] + x.loc['tp']),
                      'fpr': lambda x: x.loc['fp']/(x.loc['fp'] + x.loc['tn']),
-                     'f1': lambda x: (x.loc['tpr'] * x.loc['ppv']) / (x.loc['tpr'] + x.loc['ppv'])
+                     'f1': lambda x: (2 * x.loc['tpr'] * x.loc['ppv']) / (x.loc['tpr'] + x.loc['ppv'])
                      }
 
         if terms != None:
