@@ -46,7 +46,7 @@ In each subreddit I searched through comments until I found one that aligned wit
 
 *Note, SnoopSnoo does not have 'extremist' functionality. That must be interpreted by the investigator.*
 
-After finding 40 nuts, I used a similar process to find users who could safely be labeled as 'not-nuts'. They were found in normal subreddits like the ones found [here](http://redditlist.com/). With 80 labeled users, I used PRAW to collect up to their last 1000 comments (reddit API limits). However, the amount of vocabulary contained by 80 users would not be enough for the NLP analysis. So 200 users were randomly selected from 'nut' subreddits in the table and 200 more from the 'not-nut' subreddits in the link.
+After finding 40 nuts, I used a similar process to find users who could safely be labeled as 'not-nuts'. They were found in normal subreddits like the ones found [here](http://redditlist.com/). With 80 labeled users, I used PRAW to collect up to their last 1000 comments (reddit API limits). However, the amount of vocabulary contained by 80 users would not be enough for the NLP analysis. So 200 users were randomly selected from 'nut' subreddits in the table and 200 more from the 'not-nut' subreddits in the link. All in all, my corpus (collection of comments) had 480 users, 304k comments, with an average of 192 words per comment.
 
 ---
 
@@ -60,8 +60,61 @@ In order to get a computer to make sense of the comments we need to do three thi
 
 ### Cleaning
 
-Using regex, most of the punctuation was stripped from the comments and several contractions were translated. One noteworthy bit of punctuation that was kept was the use of triple parentheses. In white nationalist groups, the use of triple parentheses around a name or group of people is a way to tell other forum-goers that this person is a jew. [Example 1](https://www.reddit.com/r/PoliticalHumor/comments/6h8nnb/the_muslim_ban/dixede1/?context=3), [Example 2 (title)](https://www.reddit.com/r/WhiteRights/comments/5auxfm/who_opened_the_borders_jews_plotted_and/).
+Using regex, most of the punctuation was stripped from the comments and several contractions were translated. One noteworthy bit of punctuation that was kept was the use of triple parentheses. In white nationalist groups, the use of triple parentheses around a name or group of people is a way to tell other forum-goers that this person is a jew. [Example 1](https://www.reddit.com/r/PoliticalHumor/comments/6h8nnb/the_muslim_ban/dixede1/?context=3), [Example 2 (title)](https://www.reddit.com/r/WhiteRights/comments/5auxfm/who_opened_the_borders_jews_plotted_and/). Anytime a triple parentheses was used, the inside word was deleted and what was fed into the vectorizers was '((()))'.
+
 
 ### Vectorizing
 
-This part has to do with transforming the words in the comment into numbers a computer can interpret. This was done with two competing methods. Each of the two vectorizers were used in different topic modeling algorithms. 
+This part has to do with transforming the words in the comment into numbers a computer can interpret. This was done with two competing methods because the topic models used later receive different vectorizers.
+
+**Term Frequncy**
+
+The first vectorizer, called a Count Vectorizer, makes a matrix of term frequencies based on the words that appear in the corpus.
+
+Example
+
+* Sentence 1: "the dog ran up the street"
+* Sentence 2: "a car ran past a stop sign"
+* Sentence 3: "a child ran in the street"
+
+The resulting term-frequency matrix looks like this:
+
+|          |car|child|dog| in|past|ran|sign|stop|street|the| up|
+|----------|:-:|:---:|:-:|:-:|:--:|:-:|:--:|:--:|:----:|:-:|:-:|
+|Sentence 1| 0 | 0   | 1 | 0 | 0  | 1 | 0  | 0  | 1    | 2 | 1 |
+|Sentence 2| 1 | 0   | 0 | 0 | 1  | 1 | 1  | 1  | 0    | 0 | 0 |
+|Sentence 3| 0 | 1   | 0 | 1 | 0  | 1 | 0  | 0  | 1    | 1 | 0 |
+
+This matrix can be interpreted as the importance of each word to each document. Documents in this sense being sentences, but in the context of this study the documents are user comments. The higher the number, the more important that word is to the document. It's easy to see how common words like 'a' or 'the' could be mislabeled as important. To combat this we exclude these words, now called 'stop words'. The term-frequency matrix looks considerably more informative after removing the stop words.
+
+|          |car|child|dog|ran|sign|stop|street|
+|----------|:-:|:---:|:-:|:-:|:--:|:--:|:----:|
+|Sentence 1| 0 | 0   | 1 | 1 | 0  | 0  | 1    |
+|Sentence 2| 1 | 0   | 0 | 1 | 1  | 1  | 0    |
+|Sentence 3| 0 | 1   | 0 | 1 | 0  | 0  | 1    |
+
+Looking at the words left over we can still make sense what each sentence is discussing.
+
+* Sentence 1: dog, ran, street
+* Sentence 2: car, ran, sign, stop
+* Sentence 3: child, ran, street
+
+**Tf-Idf**
+
+Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tfidf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
+
+![Idf](images/readme/idf.jpg)
+
+https://moz.com/blog/inverse-document-frequency-and-the-importance-of-uniqueness
+
+Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
+
+### Topic Modeling
+
+In this section, we use two different matrix algorithms to discover the topics in each comment.
+
+**NMF**
+
+NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix.
+
+![NMF](images/readme/NMF.png)
