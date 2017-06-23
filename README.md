@@ -48,6 +48,10 @@ In each subreddit I searched through comments until I found one that aligned wit
 
 After finding 40 nuts, I used a similar process to find users who could safely be labeled as 'not-nuts'. They were found in normal subreddits like the ones found [here](http://redditlist.com/). With 80 labeled users, I used PRAW to collect up to their last 1000 comments (reddit API limits). However, the amount of vocabulary contained by 80 users would not be enough for the NLP analysis. So 200 users were randomly selected from 'nut' subreddits in the table and 200 more from the 'not-nut' subreddits in the link. All in all, my corpus (collection of comments) had 480 users, 304k comments, with an average of 192 words per comment.
 
+**Testing Data**
+
+Two weeks after the original 480 user corpus was scraped, 10 more nuts and 10 more non-nuts were found and labeled. These users were to be only used in the evaluation of the predictive models. No NLP transform, algorithm or predictive model was trained on these 20 users.
+
 ---
 
 ## Topic Modeling
@@ -57,6 +61,8 @@ In order to get a computer to make sense of the comments we need to do three thi
 1. Clean the comments
 2. Vectorize comments into numbers
 3. Label the topic that the comment is discussing
+
+There will be two competing methods for topic modeling which will be evaluated afterwards with predictive models.
 
 ### Cleaning
 
@@ -115,6 +121,73 @@ In this section, we use two different matrix algorithms to discover the topics i
 
 **NMF**
 
-NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix.
+NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix. The matrix of interest would be the one from our Tf-Idf vectorizer.
 
 ![NMF](images/readme/NMF.png)
+
+https://en.wikipedia.org/wiki/Non-negative_matrix_factorization
+
+The reasoning behind this is that if we originally had N comments and M words in our vectorizer matrix we could break it down into an N x k and k x M matrices. What does the number k represent? K is a hyperparameter in NMF which decides he number of latent topics used in the decomposition of the vectorizer matrix. Then, setting W as the ouptut from our NMF, we have a new matrix which represents the importance of topics to each comment.
+
+Example: Document-Topic Matrix
+
+|           | topic_0 | topic_1 | topic_2 | topic_3 | topic_4 |
+|-----------|:-------:|:-------:|:-------:|:-------:|:-------:|
+| comment_0 |  8      |  5      |  1      |  5      | 0       |
+| comment_1 |  1      |  0      |  2      |  3      | 1       |
+| comment_2 |  0      |  4      |  1      |  2      | 0       |
+
+Each comment is then labeled as whichever topic is most important to it.
+
+|           | topic # |
+|-----------|:-------:|
+| comment_0 |  0      |
+| comment_1 |  3      |
+| comment_2 |  1      |
+
+**LDA**
+
+LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm but goes about it in a completely different way than NMF. Firstly, LDA is not a linear algebra approximation technique but a generative statistical model. It relies on the probabilities of term frequencies to make inferences of topic importances. For this reason it uses the vanilla term-frequency matrix as input.
+
+**Topic Modeling Notes**
+
+1. There were 6 topic models for both LDA and NMF that were trained. Each one having a different number of topics ranging from 25 to 150 in increments of 25.
+
+---
+
+## Predictive Modeling
+
+Now that each comment is a number, and each user is represented as a collection of numbers, we can start training, testing, and evaluating our models.
+
+**Heuristic Development**
+
+Since we are interested in predicting whether or not a user is a nut, we need  to transform each user's collection of topic numbers into a single row that can be fed into a model. To do this, we first aggregate the comment count per topic for each user into a vector.
+
+Example for one user with 10 comments and 3 possible topics:
+
+|           | topic # |
+|-----------|:-------:|
+| comment_0 |  0      |
+| comment_1 |  2      |
+| comment_2 |  1      |
+| comment_3 |  1      |
+| comment_4 |  2      |
+| comment_5 |  1      |
+| comment_6 |  0      |
+| comment_7 |  1      |
+| comment_8 |  2      |
+| comment_9 |  1      |
+
+The resulting Comment Count per Topic vector (CCT vector)
+
+< 2, 5, 3 >
+
+After each user had their CCT vector made, the data was standardized per topic number. This way, topics that were more popular won't be overfitted in our models and we can just compare each user's activity per topic to the mean and spread of the 480 users.
+
+### Modeling
+
+Three classifying models were chosen to make predictions on users: Adaptive Boost, Gradient Boost, and Random Forest. The reasoning behind this is that most of the topics numbers in both LDA and NMF could not differentiate the population of labeled nuts and non-nuts to a strong degree.
+
+**INSERT PICTURE OF NMF AND LDA NUT MINUS SAFE**
+
+Given that each topic number on its own is a weak classifier, this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
