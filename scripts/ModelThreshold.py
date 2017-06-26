@@ -150,33 +150,33 @@ class ModelThreshold(object):
         self.ld_gbc_df.fillna(0.0, inplace=True)
         self.ld_rfc_df.fillna(0.0, inplace=True)
 
-    def roc_pred_models(self):
-        '''
-        Makes an ROC curve of all three predictive models for either NMF or LDA.
-        Only for one value of n_topics.
-        '''
-
-    def roc_n_topics(self):
-        '''
-        Makes an ROC curve for specific predictive model & topic model for all numbers of topics.
-        '''
-
-    def roc_nmf_vs_lda(self, model, n_topics):
-        '''
-        Makes an ROC curve for a specific predictive model and number of topics. Shows the NMF version vs. LDA
-
-        model - string
-        
-        '''
-
-    def roc_misc(self, topic_1, n_topic_1, pred_1, topic_2, n_topic_2, pred_2):
-        '''
-        Makes an ROC curve for two models. Must select topic model type, n_topics, and predictive model type for both models.
-
-        topic_1/topic_2 - string
-        'nmf' or 'lda'
-        n_topic_1/n_topic_2 - string
-        An int between 25 and 150 that is a multiple of 25.
-        pred_1/pred_2 - string
-        'abc', 'gbc', or 'rfc'
-        '''
+    # def roc_pred_models(self):
+    #     '''
+    #     Makes an ROC curve of all three predictive models for either NMF or LDA.
+    #     Only for one value of n_topics.
+    #     '''
+    #
+    # def roc_n_topics(self):
+    #     '''
+    #     Makes an ROC curve for specific predictive model & topic model for all numbers of topics.
+    #     '''
+    #
+    # def roc_nmf_vs_lda(self, model, n_topics):
+    #     '''
+    #     Makes an ROC curve for a specific predictive model and number of topics. Shows the NMF version vs. LDA
+    #
+    #     model - string
+    #
+    #     '''
+    #
+    # def roc_misc(self, topic_1, n_topic_1, pred_1, topic_2, n_topic_2, pred_2):
+    #     '''
+    #     Makes an ROC curve for two models. Must select topic model type, n_topics, and predictive model type for both models.
+    #
+    #     topic_1/topic_2 - string
+    #     'nmf' or 'lda'
+    #     n_topic_1/n_topic_2 - string
+    #     An int between 25 and 150 that is a multiple of 25.
+    #     pred_1/pred_2 - string
+    #     'abc', 'gbc', or 'rfc'
+    #     '''
