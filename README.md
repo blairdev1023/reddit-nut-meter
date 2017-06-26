@@ -42,21 +42,23 @@ Using a python module called [PRAW](https://praw.readthedocs.io/en/latest/) (Pyt
 | feminstpassdenied | 4k            |
 | nationalsocialism | 3k            |
 
-In each subreddit I searched through comments until I found one that aligned with the definition of a nut. But one radical comment was not enough, I had to make sure this behavior had been repeated. Another complication, if this was the only type of activity on their account, then it was likely an alternate account that they are using to discuss their radical ideas. That's a problem because those users never go to normal subreddits anyway, and wouldn't be interacted with 'in the wild.' So I had to pick a balance of some normal and some extremist activity. This tedious process was aided greatly by the use of a website called [SnoopSnoo](https://snoopsnoo.com/). SnoopSnoo collects up to the last 1000 comments from the user of interest and profiles their activity. You can get a breakdown of the subreddits they visit, lifestyle choices, and hobbies. Using SnoopSnoo, I was able to validate my choice for 'nuts' and 'non-nuts.'
+In each subreddit, I searched through comments until I found one that aligned with the definition of a nut. But one radical comment was not enough to label a user a nut, I had to make sure this behavior had been repeated. Another complication, if this was the only type of activity on their account, then it was likely an alternate account that they are using to discuss their radical ideas. That's a problem because those users never go to normal subreddits anyway, and wouldn't be interacted with 'in the wild.' So I had to pick a balance of some normal and some extremist activity. This tedious process was aided greatly by the use of a website called [SnoopSnoo](https://snoopsnoo.com/). SnoopSnoo collects up to the last 1000 comments from the user of interest and profiles their activity. You can get a breakdown of the subreddits they visit, lifestyle choices, and hobbies. Using SnoopSnoo, I was able to validate my choice for 'nuts' and 'non-nuts.'
 
 *Note, SnoopSnoo does not have 'extremist' functionality. That must be interpreted by the investigator.*
 
-After finding 40 nuts, I used a similar process to find users who could safely be labeled as 'not-nuts'. They were found in normal subreddits like the ones found [here](http://redditlist.com/). With 80 labeled users, I used PRAW to collect up to their last 1000 comments (reddit API limits). However, the amount of vocabulary contained by 80 users would not be enough for the NLP analysis. So 200 users were randomly selected from 'nut' subreddits in the table and 200 more from the 'not-nut' subreddits in the link. All in all, my corpus (collection of comments) had 480 users, 304k comments, with an average of 192 words per comment.
+After finding 40 nuts, I used a similar process to find users who could safely be labeled as 'not-nuts'. They were found in normal subreddits like the ones found [here](http://redditlist.com/). With 80 labeled users, I used PRAW to collect up to their last 1000 comments (reddit API limits). However, the amount of vocabulary contained by 80 users would not be enough for the NLP analysis. So 200 users were randomly selected from the 'nut' subreddits in the table and 200 more from the 'non-nut' subreddits in the link. All in all, my corpus (collection of comments) had 480 users, 304k comments, with an average of 192 words per comment.
 
 **Testing Data**
 
 Two weeks after the original 480 user corpus was scraped, 10 more nuts and 10 more non-nuts were found and labeled. These users were to be only used in the evaluation of the predictive models. No NLP transform, algorithm or predictive model was trained on these 20 users.
 
+*Note, the purpose behind getting the testing users 2 weeks later is that the relevant topics (politics) have changed and I want to make sure the predictive model works on new vocabulary data.*
+
 ---
 
 ## Topic Modeling
 
-In order to get a computer to make sense of the comments we need to do three things to the comments:
+In order to get a computer to make sense of the comments we need to do three things to the corpus:
 
 1. Clean the comments
 2. Vectorize comments into numbers
@@ -71,11 +73,11 @@ Using regex, most of the punctuation was stripped from the comments and several 
 
 ### Vectorizing
 
-This part has to do with transforming the words in the comment into numbers a computer can interpret. This was done with two competing methods because the topic models used later receive different vectorizers.
+Vectorizing has to do with transforming the words in the comments into numbers a computer can interpret. This was done in two methods as the two different topic models used later receive different vectorizers.
 
 **Term Frequncy**
 
-The first vectorizer, called a Count Vectorizer, makes a matrix of term frequencies based on the words that appear in the corpus.
+The first vectorizer, called a Count Vectorizer, makes a matrix of *term frequencies* based on the words that appear in the corpus.
 
 Example
 
@@ -91,7 +93,7 @@ The resulting term-frequency matrix looks like this:
 |Sentence 2| 1 | 0   | 0 | 0 | 1  | 1 | 1  | 1  | 0    | 0 | 0 |
 |Sentence 3| 0 | 1   | 0 | 1 | 0  | 1 | 0  | 0  | 1    | 1 | 0 |
 
-This matrix can be interpreted as the importance of each word to each document. Documents in this sense being sentences, but in the context of this study the documents are user comments. The higher the number, the more important that word is to the document. It's easy to see how common words like 'a' or 'the' could be mislabeled as important. To combat this we exclude these words, now called 'stop words'. The term-frequency matrix looks considerably more informative after removing the stop words.
+This matrix can be interpreted as the importance of each word to each document (Documents in this sense being sentences, but in the context of this study the documents are user comments). The higher the number, the more important that word is to the document. It's easy to see how common words like 'a' or 'the' could be mislabeled as important. To combat this we exclude these words, now called 'stop words'. The term-frequency matrix looks considerably more informative after removing the stop words.
 
 |          |car|child|dog|ran|sign|stop|street|
 |----------|:-:|:---:|:-:|:-:|:--:|:--:|:----:|
@@ -107,7 +109,7 @@ Looking at the words left over we can still make sense what each sentence is dis
 
 **Tf-Idf**
 
-Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tfidf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
+Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tf-Idf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
 
 ![Idf](images/readme/idf.jpg)
 
@@ -147,11 +149,11 @@ Each comment is then labeled as whichever topic is most important to it.
 
 **LDA**
 
-LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm but goes about it in a completely different way than NMF. Firstly, LDA is not a linear algebra approximation technique but a generative statistical model. It relies on the probabilities of term frequencies to make inferences of topic importances. For this reason it uses the vanilla term-frequency matrix as input.
+LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm but goes about it in a completely different way than NMF. Firstly, LDA is not a linear algebra approximation technique but a generative statistical model. It relies on the probabilities of term frequencies to make inferences of topic importances. For this reason it uses the vanilla term-frequency matrix as input. Once the vectorizer is decomposed into a Document-Topic matrix and Topic-Word Matrix (akin to the W & H matrices returned from NMF), we label each comment's topic as we did when labeling after NMF, by finding the most important topic in the Document-Topic matrix.
 
 **Topic Modeling Notes**
 
-1. There were 6 topic models for both LDA and NMF that were trained. Each one having a different number of topics ranging from 25 to 150 in increments of 25.
+* There were 6 topic models each for both LDA and NMF that were trained. Each one having a different number of topics ranging from 25 to 150 in increments of 25.
 
 ---
 
@@ -161,7 +163,7 @@ Now that each comment is a number, and each user is represented as a collection 
 
 **Heuristic Development**
 
-Since we are interested in predicting whether or not a user is a nut, we need  to transform each user's collection of topic numbers into a single row that can be fed into a model. To do this, we first aggregate the comment count per topic for each user into a vector.
+Since we are interested in predicting whether or not a user is a nut, we need  to transform each user's collection of topic numbers into a numeric expression that can be fed into a model. To do this, we first aggregate the comment count per topic for each user into a vector.
 
 Example for one user with 10 comments and 3 possible topics:
 
