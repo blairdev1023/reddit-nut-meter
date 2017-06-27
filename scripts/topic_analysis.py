@@ -118,7 +118,6 @@ def standardize_gb(score_agg_dfs, n_topics, names_lists):
 
     Returns: topic_df_train, topic_df_test
     '''
-    start_func = time()
     # get standardized data
     print_time('Standardizing', start)
     score_agg_df_train, score_agg_df_test = score_agg_dfs
@@ -137,7 +136,6 @@ def standardize_gb(score_agg_dfs, n_topics, names_lists):
         df_test.loc[idx] = z_score(df_test.loc[idx], mean, std)
 
     # make dataframes of names vs. topic (topic_df)
-    print_time('Done Standarding, That Took', start_func)
     print_time('Making Topic DataFrame', start)
     names_train = df_train.index.get_level_values(0).unique().tolist()
     names_test = df_test.index.get_level_values(0).unique().tolist()
@@ -285,26 +283,84 @@ def pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics):
 
     return y_probs_nmf, y_probs_lda
 
+def plot_roc(mts, ax, models, thresholds=np.arange(0, 1.05, 0.05), roc=True):
+    '''
+
+    mts - list
+        each mt in the this list should have data loaded into it along with relevant terms made via the in-class methods (see ModelThreshold.py)
+    ax - matplotlib axes object
+        the already instantiated axis that will have the plots made on it
+    models - list of tuples
+        each tuple: (topic, pred, n_topics) where topic is a string of 'NMF' or 'LDA', pred is a string of 'abc', 'gbc', or 'rfc', and n_topics is an int multiple of 25 between 25 and 150
+    thresholds - list or iterable
+        optional array of percent thresholds to be plotted for a roc, default is 0-1 in increments of 0.05
+    roc - bool
+        optional bool argument that if False, makes a 'normal' plot instead of a roc plot
+    '''
+    color_dict = {'nmf': 'r', 'lda': 'b'}
+    ls_dict = {'abc': '--', 'gbc': ':', 'rfc': '-'}
+
+    if roc == True:
+        for model in models:
+            topic = model[0].lower()
+            pred = model[1]
+            n_topics = model[2]
+            if len(mts) > 1:
+                mt = mts[int(n_topics / 25 - 1)]
+            else:
+                mt = mts[0]
+            df = eval('mt.%s_%s_df' % (topic[:2], pred))
+
+            x = df['fpr'].values
+            y = df['tpr'].values
+            label = '%s, %s, %s topics' % (topic.upper(),pred.upper(),n_topics)
+            color = color_dict[topic]
+            ls = ls_dict[pred]
+            ax.plot(x, y, label=label,color=color, ls=ls,
+                    marker='.')
+        ax.plot(thresholds, thresholds, ls='--', color='k')
 
 if __name__ == '__main__':
     start = time()
 
-    n_topics = int(sys.argv[1])
+    n_topic = int(sys.argv[1])
     names_lists = get_name_lists()
+    topic_numbers = [n_topic]
+    mts = []
 
-    master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
+    for n_topics in topic_numbers:
+        master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
 
-    score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
-    score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
+        score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
+        score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
 
-    topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
-    topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
+        topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
+        topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
 
-    y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics)
+        y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda,
+                                             n_topics)
+        mt = ModelThreshold(y_probs_nmf, y_probs_lda,
+                            topic_dfs_nmf, topic_dfs_lda)
+        mt.confusion_terms(terms=['fpr', 'tpr', 'ppv', 'f1'])
+        mts.append(mt)
 
-    mt = ModelThreshold(y_probs_nmf, y_probs_lda, topic_dfs_nmf, topic_dfs_lda)
-    # mt.show_class_report()
-    mt.confusion_terms(terms=['fpr', 'tpr', 'ppv', 'f1'])
 
+    models = [('nmf', 'abc', n_topic),
+              ('nmf', 'gbc', n_topic),
+              ('nmf', 'rfc', n_topic),
+              ('lda', 'abc', n_topic),
+              ('lda', 'gbc', n_topic),
+              ('lda', 'rfc', n_topic),              ]
+    plt.style.use('ggplot')
+    fig = plt.figure(figsize=(8,8))
+    ax = fig.add_subplot(111)
+    plot_roc(mts, ax, models)
+
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('ROC Curve of NMF and LDA models with %s topics' % n_topic)
+    plt.legend(loc='best')
+    plt.savefig('../images/%s_topics.png' % n_topic)
+    plt.close()
 
     print_time('Done', start)

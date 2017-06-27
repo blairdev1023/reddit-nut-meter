@@ -18,7 +18,7 @@ class ModelThreshold(object):
         self.nm_X_train,self.nm_y_train,self.nm_X_test,self.nm_y_test = t_d_n
         self.ld_X_train,self.ld_y_train,self.ld_X_test,self.ld_y_test = t_d_l
 
-        self.thresholds = np.arange(0.30, 0.75, 0.05)
+        self.thresholds = np.arange(0, 1.05, 0.05)
 
     def load_split(self, topic_dfs_model):
         '''
@@ -68,7 +68,7 @@ class ModelThreshold(object):
         # instantiates df's for NMF and LDA
         columns = ['threshold','tn','fp','fn','tp']
         self.nm_abc_df = pd.DataFrame(columns=columns)
-        self.nm_gbc_df = pd.DataFrame(coslumns=columns)
+        self.nm_gbc_df = pd.DataFrame(columns=columns)
         self.nm_rfc_df = pd.DataFrame(columns=columns)
 
         self.ld_abc_df = pd.DataFrame(columns=columns)
@@ -146,6 +146,7 @@ class ModelThreshold(object):
         self.nm_abc_df.fillna(0.0, inplace=True)
         self.nm_gbc_df.fillna(0.0, inplace=True)
         self.nm_rfc_df.fillna(0.0, inplace=True)
+
         self.ld_abc_df.fillna(0.0, inplace=True)
         self.ld_gbc_df.fillna(0.0, inplace=True)
         self.ld_rfc_df.fillna(0.0, inplace=True)
