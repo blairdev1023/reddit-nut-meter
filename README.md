@@ -197,8 +197,8 @@ Given that each topic number on its own is a weak classifier, this looked like a
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
 ![25](images/readme/25_topics.png)
-![50](images/readme/25_topics.png)
-![75](images/readme/25_topics.png)
-![100](images/readme/25_topics.png)
-![125](images/readme/25_topics.png)
-![150](images/readme/25_topics.png)
+![50](images/readme/50_topics.png)
+![75](images/readme/75_topics.png)
+![100](images/readme/100_topics.png)
+![125](images/readme/125_topics.png)
+![150](images/readme/150_topics.png)
