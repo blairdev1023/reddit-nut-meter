@@ -194,6 +194,10 @@ Three classifying models were chosen to make predictions on users: Adaptive Boos
 
 Given that each topic number on its own is a weak classifier, this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
 
+**Model Evaluation**
+
+There are now 36 models to compare (2 topics models * 3 predictive models * 6 number of topics).
+
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
 ![25](images/readme/25_topics.png)
@@ -202,3 +206,9 @@ Below are ROC curves which compare the three predictive models for NMF against t
 ![100](images/readme/100_topics.png)
 ![125](images/readme/125_topics.png)
 ![150](images/readme/150_topics.png)
+
+Out of the 36 models shown, the best one was in the ROC curve for 50 topics. In that plot, the LDA Random Forest Classifier has a marker at 10% FPR and 90% TPR. Looking up this model in the ModelThreshold method 'show_class_report' we find that this particular model had a threshold of 55%. The way this model was chosen was by first prioritizing a minimum FPR and then maximizing our TPR. The reasoning behind that can be illustrated in an example.
+
+Let's say we are studying a population of 100 users, 10 of whom are nuts. What this chosen model does is identifies 9/10 of the nuts but also mislabels 9/90 non-nuts as nuts. So we end up with a supposed nut population of 18 users when in reality only half of those people are nuts. The size of the FPR problem is inversely proportional the percentage of nuts. So since the nuts are more sparse in everyday scenarios means that *any* FPR strongly dampers our predictive power.
+
+The obvious answer in reponse to this is why not just pick a 0% FPR model and deal with 40%-50% TPR instead? While that is tempting, it's difficult to defend that with a test set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That happens to be model mentioned above.
