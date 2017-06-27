@@ -113,8 +113,6 @@ Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of
 
 ![Idf](images/readme/idf.jpg)
 
-https://moz.com/blog/inverse-document-frequency-and-the-importance-of-uniqueness
-
 Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
 
 ### Topic Modeling
@@ -126,8 +124,6 @@ In this section, we use two different matrix algorithms to discover the topics i
 NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix. The matrix of interest would be the one from our Tf-Idf vectorizer.
 
 ![NMF](images/readme/NMF.png)
-
-https://en.wikipedia.org/wiki/Non-negative_matrix_factorization
 
 The reasoning behind this is that if we originally had N comments and M words in our vectorizer matrix we could break it down into an N x k and k x M matrices. What does the number k represent? K is a hyperparameter in NMF which decides he number of latent topics used in the decomposition of the vectorizer matrix. Then, setting W as the ouptut from our NMF, we have a new matrix which represents the importance of topics to each comment.
 
@@ -196,7 +192,7 @@ Given that each topic number on its own is a weak classifier, this looked like a
 
 **Model Evaluation**
 
-There are now 36 models to compare (2 topics models * 3 predictive models * 6 number of topics).
+There are now 36 models to compare (2 topics models) x (3 predictive models) x (6 number of topics).
 
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
@@ -207,8 +203,44 @@ Below are ROC curves which compare the three predictive models for NMF against t
 ![125](images/readme/125_topics.png)
 ![150](images/readme/150_topics.png)
 
-Out of the 36 models shown, the best one was in the ROC curve for 50 topics. In that plot, the LDA Random Forest Classifier has a marker at 10% FPR and 90% TPR. Looking up this model in the ModelThreshold method 'show_class_report' we find that this particular model had a threshold of 55%. The way this model was chosen was by first prioritizing a minimum FPR and then maximizing our TPR. The reasoning behind that can be illustrated in an example.
+Out of the 36 models shown, the best one was in the ROC curve for 50 topics. In that plot, the LDA Random Forest Classifier has a marker at 10% FPR and 90% TPR. Looking up this model in the ModelThreshold method 'show_class_report' we find that this particular model had a threshold of 55%. The way this model was chosen was by first prioritizing a minimum FPR and then maximizing our TPR. The logic surrounding this decision can be illustrated in an example.
 
 Let's say we are studying a population of 100 users, 10 of whom are nuts. What this chosen model does is identifies 9/10 of the nuts but also mislabels 9/90 non-nuts as nuts. So we end up with a supposed nut population of 18 users when in reality only half of those people are nuts. The size of the FPR problem is inversely proportional the percentage of nuts. So since the nuts are more sparse in everyday scenarios means that *any* FPR strongly dampers our predictive power.
 
-The obvious answer in reponse to this is why not just pick a 0% FPR model and deal with 40%-50% TPR instead? While that is tempting, it's difficult to defend that with a test set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That happens to be model mentioned above.
+The obvious answer in response to this is why not just pick a 0% FPR model and deal with 40%-50% TPR instead? While that is tempting, it's difficult to defend that by testing on a set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That is how the model above was chosen.
+
+### Expansion
+
+While not a deliverable product on its own, this study shows strong promise for a full-fledged profiling algorithm. Below is a list of possible directions to improve and expand the capabilities of the current model.
+
+1. **More Data**
+
+    The longest part of this study was discovering and labeling nuts and non-nuts. While it can take up to half an hour to find and confirm a nut, you could probably find half a dozen non-nuts in that same amount of time. By collecting around 10 times more non-nut meta-data we would be able to train the model on more non-nut vocabulary along with testing on more users to bring down the high FPR. Something along the lines of testing on 100 non-nuts and 10 nuts could yield a much better model of 1% FPR and 90% TPR.
+
+2. **Feature Engineering**
+
+    This study only used the words that appeared in each user's comments. Other meta-data that could have been used would have been the subreddit that the comment was made in along with the karma score that comment received. A comment's karma score is the net value of upvotes and downvotes given by the users of a subreddit.
+
+    Using the subreddit information we can label topics to subreddits and develop a feature of frequency posted in certain subreddit topics.
+
+    The karma score can be used to reinforce suspicions of nut and non-nut posts. If a user makes a comment that is labeled as extremist AND the subreddit community gives that comment a large karma score, then we can feel more assured that this comment (and user) is nutty. Likewise, if a user makes a comment that is labeled extremist BUT it gets heavily downvoted from the community, then they likely are disagreeing with the topic while using the shared vocabulary.
+
+3. **Heuristic Development**
+
+    Recall the CCT vector used to train and test the predictive models. The Comments Count per Topic, while intuitive, was a completely made up heuristic. Its use could only be defended if the predictive models worked (which they did). Other options for a heuristic could be the karma score per topic, the karma times count per topic, or the log(karma times count) per topic. As we engineer more features the number of heuristic possibilities grows exponentially.
+
+4. **Model Stacking**
+
+    Instead of trying to find the 'perfect' heuristic we could stack the predictions made by each feature (comment words, subreddit, and karma). This is done by first going through the entire process as it currently stands. Then when I get my raw prediction probabilities per user using the comments, I add those probabilities as a feature when training the subreddit data. The same recursive procedure could be used for as many features desired.
+
+### Work Cited
+
+* [PRAW](https://praw.readthedocs.io/en/latest/)
+
+* [SnoopSnoo](https://snoopsnoo.com/about/)
+
+* [Idf Definition](https://moz.com/blog/inverse-document-frequency-and-the-importance-of-uniqueness)
+
+* [NMF Diagram](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization)
+
+* [Word Clouds](https://github.com/amueller/word_cloud)
