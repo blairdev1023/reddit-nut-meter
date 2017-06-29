@@ -194,7 +194,7 @@ To get a better idea of the differentiation of users provided by NMF and LDA, we
 
 Given that each topic number on its own is a weak classifier (no single topic across all NMF & LDA models was able to break one standard deviation of difference), this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
 
-You can find the entire plot in the Appendix. Along with ones for other numbers of topics
+You can find the entire plot in the Appendix. Along with ones for other numbers of topics.
 
 **Model Evaluation**
 
@@ -257,6 +257,16 @@ Below are interesting plots and word clouds. They are not pertinent to the model
 
 Last warning, some racial slurs in this section.
 
+
+
+**NMF Vs. LDA**
+
+![25_topics](images/diff_nmf_lda_25.png)
+![25_topics](images/diff_nmf_lda_50.png)
+![25_topics](images/diff_nmf_lda_75.png)
+![25_topics](images/diff_nmf_lda_100.png)
+![25_topics](images/diff_nmf_lda_125.png)
+![25_topics](images/diff_nmf_lda_150.png)
 
 **ROC Curves over number of topics**
 

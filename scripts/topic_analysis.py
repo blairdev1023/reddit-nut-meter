@@ -389,7 +389,12 @@ def plot_nmf_lda_diff(topic_dfs_nmf, topic_dfs_lda, names_lists, n_topics):
     ax.set_title('Nut & Non-Nut Mean CCT Standardized Difference for NMF & LDA @ %s topics' % n_topics)
     ax.set_xlabel('Topic Number Index')
     ax.set_ylabel('Standardized Difference Between Means')
-    ax.set_xticks(range(n_topics))
+    if n_topics <= 50:
+        ax.set_xticks(np.arange(0, n_topics))
+    elif n_topics <= 100:
+        ax.set_xticks(np.arange(0, n_topics, 2))
+    else:
+        ax.set_xticks(np.arange(0, n_topics, 4))
     plt.legend(loc=1)
     plt.savefig('../images/diff_nmf_lda_%s.png' % n_topics)
     plt.close()
