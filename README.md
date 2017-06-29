@@ -111,7 +111,7 @@ Looking at the words left over we can still make sense what each sentence is dis
 
 Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tf-Idf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
 
-![Idf](images/readme/idf.jpg)
+![Idf](images/idf.jpg)
 
 Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
 
@@ -123,7 +123,7 @@ In this section, we use two different matrix algorithms to discover the topics i
 
 NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix. The matrix of interest would be the one from our Tf-Idf vectorizer.
 
-![NMF](images/readme/NMF.png)
+![NMF](images/NMF.png)
 
 The reasoning behind this is that if we originally had N comments and M words in our vectorizer matrix we could break it down into an N x k and k x M matrices. What does the number k represent? K is a hyperparameter in NMF which decides he number of latent topics used in the decomposition of the vectorizer matrix. Then, setting W as the ouptut from our NMF, we have a new matrix which represents the importance of topics to each comment.
 
@@ -150,6 +150,8 @@ LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm b
 **Topic Modeling Notes**
 
 * There were 6 topic models each for both LDA and NMF that were trained. Each one having a different number of topics ranging from 25 to 150 in increments of 25.
+
+* There are a few word clouds of topic numbers included in the Appendix. Again, some language could be offensive to some readers.
 
 ---
 
@@ -186,9 +188,13 @@ After each user had their CCT vector made, the data was standardized per topic n
 
 Three classifying models were chosen to make predictions on users: Adaptive Boost, Gradient Boost, and Random Forest. The reasoning behind this is that most of the topics numbers in both LDA and NMF could not differentiate the population of labeled nuts and non-nuts to a strong degree.
 
-**INSERT PICTURE OF NMF AND LDA NUT MINUS SAFE**
+To get a better idea of the differentiation of users provided by NMF and LDA, we can look at the mean CCT values between the Nuts and Non-Nuts. Below is a sample of topic differences pulled from NMF & LDA models using 50 topics. The data has been standardized, which means that the magnitudes plotted are the number of standard deviations between the two means. Positive values indicate more nut presence in that topic while negative values indicate more non-nut participation in those topics. The greater the average differentiation the better the predictive models will be able to predict nuts.
 
-Given that each topic number on its own is a weak classifier, this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
+![NMF-LDA sample](images/diff_nmf_lda_sample.png)
+
+Given that each topic number on its own is a weak classifier (no single topic across all NMF & LDA models was able to break one standard deviation of difference), this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
+
+You can find the entire plot in the Appendix. Along with ones for other numbers of topics
 
 **Model Evaluation**
 
@@ -196,12 +202,14 @@ There are now 36 models to compare (2 topics models) x (3 predictive models) x (
 
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
-![25](images/readme/25_topics.png)
-![50](images/readme/50_topics.png)
-![75](images/readme/75_topics.png)
-![100](images/readme/100_topics.png)
-![125](images/readme/125_topics.png)
-![150](images/readme/150_topics.png)
+An analysis of the ROC curves follows afterwards.
+
+![25](images/25_topics.png)
+![50](images/50_topics.png)
+![75](images/75_topics.png)
+![100](images/100_topics.png)
+![125](images/125_topics.png)
+![150](images/150_topics.png)
 
 Out of the 36 models shown, the best one was in the ROC curve for 50 topics. In that plot, the LDA Random Forest Classifier has a marker at 10% FPR and 90% TPR. Looking up this model in the ModelThreshold method 'show_class_report' we find that this particular model had a threshold of 55%. The way this model was chosen was by first prioritizing a minimum FPR and then maximizing our TPR. The logic surrounding this decision can be illustrated in an example.
 
@@ -209,7 +217,9 @@ Let's say we are studying a population of 100 users, 10 of whom are nuts. What t
 
 The obvious answer in response to this is why not just pick a 0% FPR model and deal with 40%-50% TPR instead? While that is tempting, it's difficult to defend that by testing on a set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That is how the model above was chosen.
 
-### Expansion
+Discussion of the Random Forest performance vs. the Boosting algorithms is discussed in the Appendix. Also in the Appendix are 6 more ROC curves that show how each topic/predictive model combo improved or regressed as the number of topics increased.
+
+## Expansion
 
 While not a deliverable product on its own, this study shows strong promise for a full-fledged profiling algorithm. Below is a list of possible directions to improve and expand the capabilities of the current model.
 
@@ -232,6 +242,32 @@ While not a deliverable product on its own, this study shows strong promise for 
 4. **Model Stacking**
 
     Instead of trying to find the 'perfect' heuristic we could stack the predictions made by each feature (comment words, subreddit, and karma). This is done by first going through the entire process as it currently stands. Then when I get my raw prediction probabilities per user using the comments, I add those probabilities as a feature when training the subreddit data. The same recursive procedure could be used for as many features desired.
+
+5. **Nut Types**
+
+    It is ironic that a group that gathers around hating diversity tends to be rather diverse. Nut comes in several flavors: White Nationalist, Extreme Christian Fundamentalist, Separatist, Anarchist, Rapist, etc..
+
+    Beyond just expanding the amount of labeled data we could also expand the types of nuts in our studies. Perhaps we want to just find neo-nazis or people who likely commit domestic violence. Through more tedious searching (all of which must be done by hand) we could gather that information and proceed with the modeling.
+
+### Appendix
+
+Below are interesting plots and word clouds. They are not pertinent to the modeling but can be worth a look for those interested.
+
+**Word Clouds**
+
+Last warning, some racial slurs in this section.
+
+
+**ROC Curves over number of topics**
+
+![nmf_abc](images/nmf_abc_all_topics.png)
+![nmf_abc](images/nmf_gbc_all_topics.png)
+![nmf_abc](images/nmf_rfc_all_topics.png)
+![nmf_abc](images/lda_abc_all_topics.png)
+![nmf_abc](images/lda_gbc_all_topics.png)
+![nmf_abc](images/lda_rfc_all_topics.png)
+
+It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingely, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
 
 ### Work Cited
 

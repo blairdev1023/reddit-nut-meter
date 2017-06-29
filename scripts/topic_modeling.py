@@ -135,7 +135,8 @@ def append_topic_idx(master_dfs, W):
     master_df_train and master_df_test.
     '''
     print_time('Appending Indicies', start)
-    master_df_train, master_df_test = master_dfs
+    df_train, df_test = master_dfs
+    master_df_train, master_df_test = df_train.copy(), df_test.copy()
     W_train, W_test = W
     master_df_train['topic_idx'] = np.argmax(W_train, axis=1)
     master_df_test['topic_idx'] = np.argmax(W_test, axis=1)
@@ -175,14 +176,37 @@ if __name__ == '__main__':
     n_topics = int(sys.argv[1])
     stop = get_stop_words()
     master_dfs = get_master_dfs()
-    vectorizer_bow, X_bow = vectorizer_fit_transform(master_dfs, 'bow')
-    vectorizer_tfidf, X_tfidf = vectorizer_fit_transform(master_dfs, 'tfidf')
-    nmf, W_nmf = model_fit_transform(X_tfidf, 'nmf', n_topics)
-    lda, W_lda = model_fit_transform(X_bow, 'lda', n_topics)
+    # vectorizer_bow, X_bow = vectorizer_fit_transform(master_dfs, 'bow')
+    # vectorizer_tfidf, X_tfidf = vectorizer_fit_transform(master_dfs, 'tfidf')
+    # nmf, W_nmf = model_fit_transform(X_tfidf, 'nmf', n_topics)
+    # lda, W_lda = model_fit_transform(X_bow, 'lda', n_topics)
+
+    tfidf = pickle.load(open('pickles/nmf/%s_topics/vectorizer.pkl' % n_topics, 'rb'))
+    bow = pickle.load(open('pickles/lda/%s_topics/vectorizer.pkl' % n_topics, 'rb'))
+    X_train_tfidf = tfidf.transform(master_dfs[0]['body'])
+    X_test_tfidf = tfidf.transform(master_dfs[1]['body'])
+    X_train_bow = bow.transform(master_dfs[0]['body'])
+    X_test_bow = bow.transform(master_dfs[1]['body'])
+    nmf = pickle.load(open('pickles/nmf/%s_topics/model.pkl' % n_topics, 'rb'))
+    lda = pickle.load(open('pickles/lda/%s_topics/model.pkl' % n_topics, 'rb'))
+    W_train_nmf = nmf.transform(X_train_tfidf)
+    W_test_nmf = nmf.transform(X_test_tfidf)
+    W_train_lda = lda.transform(X_train_bow)
+    W_test_lda = lda.transform(X_test_bow)
+    W_nmf = (W_train_nmf, W_test_nmf)
+    W_lda = (W_train_lda, W_test_lda)
+
     master_dfs_nmf = append_topic_idx(master_dfs, W_nmf)
     master_dfs_lda = append_topic_idx(master_dfs, W_lda)
 
-    save_object(n_topics, master_dfs_nmf, master_dfs_lda,
-                    nmf, lda, vectorizer_tfidf, vectorizer_bow)
+    master_df_train_nmf, master_df_test_nmf = master_dfs_nmf
+    master_df_train_lda, master_df_test_lda = master_dfs_lda
+
+    master_df_train_nmf.to_pickle('pickles/nmf/%s_topics/master_df_train.pkl' % n_topics)
+    master_df_test_nmf.to_pickle('pickles/nmf/%s_topics/master_df_test.pkl' % n_topics)
+    master_df_train_lda.to_pickle('pickles/lda/%s_topics/master_df_train.pkl' % n_topics)
+    master_df_test_lda.to_pickle('pickles/lda/%s_topics/master_df_test.pkl' % n_topics)
+    # save_object(n_topics, master_dfs_nmf, master_dfs_lda,
+                    # nmf, lda, vectorizer_tfidf, vectorizer_bow)
 
     print_time('\nFIN\nFIN\nFIN\nFIN\nFIN', start)

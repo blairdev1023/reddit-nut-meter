@@ -283,9 +283,9 @@ def pred_prob(topic_dfs_nmf, topic_dfs_lda, n_topics):
 
     return y_probs_nmf, y_probs_lda
 
-def plot_roc(mts, ax, models, thresholds=np.arange(0, 1.05, 0.05), roc=True):
+def plot_roc(mts, ax, models, thresholds=np.arange(0, 1.05, 0.05),
+             mode='models'):
     '''
-
     mts - list
         each mt in the this list should have data loaded into it along with relevant terms made via the in-class methods (see ModelThreshold.py)
     ax - matplotlib axes object
@@ -294,13 +294,12 @@ def plot_roc(mts, ax, models, thresholds=np.arange(0, 1.05, 0.05), roc=True):
         each tuple: (topic, pred, n_topics) where topic is a string of 'NMF' or 'LDA', pred is a string of 'abc', 'gbc', or 'rfc', and n_topics is an int multiple of 25 between 25 and 150
     thresholds - list or iterable
         optional array of percent thresholds to be plotted for a roc, default is 0-1 in increments of 0.05
-    roc - bool
-        optional bool argument that if False, makes a 'normal' plot instead of a roc plot
+    mode - string
+        optional arguement that defaults to 'models'. For 'models' it plots different models against eachother for a fixed number of topics. Where as 'topics' does the opposite.
     '''
-    color_dict = {'nmf': 'r', 'lda': 'b'}
-    ls_dict = {'abc': '--', 'gbc': ':', 'rfc': '-'}
-
-    if roc == True:
+    if mode == 'models':
+        color_dict = {'nmf': 'r', 'lda': 'b'}
+        ls_dict = {'abc': '--', 'gbc': ':', 'rfc': '-'}
         for model in models:
             topic = model[0].lower()
             pred = model[1]
@@ -319,48 +318,117 @@ def plot_roc(mts, ax, models, thresholds=np.arange(0, 1.05, 0.05), roc=True):
             ax.plot(x, y, label=label,color=color, ls=ls,
                     marker='.')
         ax.plot(thresholds, thresholds, ls='--', color='k')
+    elif mode == 'topics':
+        color_dict = {25:'r',50:'orange',75:'y',100:'g',125:'b',150:'purple'}
+        for model in models:
+            topic = model[0].lower()
+            pred = model[1]
+            n_topics = model[2]
+            if len(mts) > 1:
+                mt = mts[int(n_topics / 25 - 1)]
+            else:
+                mt = mts[0]
+            df = eval('mt.%s_%s_df' % (topic[:2], pred))
+
+            x = df['fpr'].values
+            y = df['tpr'].values
+            label = '%s topics' % n_topics
+            color = color_dict[n_topics]
+            ax.plot(x, y, label=label, color=color, marker='.')
+        ax.plot(thresholds, thresholds, ls='--', color='k')
+    else:
+        print('*** ERROR ***\n\'mode\' arguement not recognized')
+
+def plot_nmf_lda_diff(topic_dfs_nmf, topic_dfs_lda, names_lists, n_topics):
+    '''
+    Single use function that plots the difference of nut and non-nut for each topic. Shows both NMF and LDA methods.
+    '''
+    sn = names_lists[0]
+    snn = names_lists[1]
+
+    nmf_df = topic_dfs_nmf[0]
+    lda_df = topic_dfs_lda[0]
+
+    nuts_nmf = np.zeros(n_topics)
+    non_nuts_nmf = np.zeros(n_topics)
+    nuts_lda = np.zeros(n_topics)
+    non_nuts_lda = np.zeros(n_topics)
+
+    # adds all nut and non-nut values together per topic
+    for name in sn:
+        for i in range(n_topics):
+            nuts_nmf[i] += nmf_df.loc[name][i]
+        for i in range(n_topics):
+            nuts_lda[i] += lda_df.loc[name][i]
+    for name in snn:
+        for i in range(n_topics):
+            non_nuts_nmf[i] += nmf_df.loc[name][i]
+        for i in range(n_topics):
+            non_nuts_lda[i] += lda_df.loc[name][i]
+
+    # normalizes
+    nuts_nmf = nuts_nmf/len(sn)
+    nuts_lda = nuts_lda/len(sn)
+    non_nuts_nmf = non_nuts_nmf/len(snn)
+    non_nuts_lda = non_nuts_lda/len(snn)
+
+    for i in range(n_topics):
+        nuts_nmf[i] = nuts_nmf[i] - non_nuts_nmf[i]
+        nuts_lda[i] = nuts_lda[i] - non_nuts_lda[i]
+
+    # plot both nmf and lda on same figure
+    width = 0.4
+    plt.style.use('ggplot')
+    fig = plt.figure(figsize=(14,7))
+    ax = fig.add_subplot(111)
+    x = np.array(range(n_topics))
+    ax.bar(x, nuts_nmf, width=width, color='k', label='NMF')
+    ax.bar(x + width, nuts_lda, width=width, color='white', ec='k', hatch='/',
+           label='LDA')
+
+    ax.set_title('Nut & Non-Nut Mean CCT Standardized Difference for NMF & LDA @ %s topics' % n_topics)
+    ax.set_xlabel('Topic Number Index')
+    ax.set_ylabel('Standardized Difference Between Means')
+    ax.set_xticks(range(n_topics))
+    plt.legend(loc=1)
+    plt.savefig('../images/diff_nmf_lda_%s.png' % n_topics)
+    plt.close()
 
 if __name__ == '__main__':
     start = time()
 
-    n_topic = int(sys.argv[1])
+    n_topics = int(sys.argv[1])
     names_lists = get_name_lists()
-    topic_numbers = [n_topic]
-    mts = []
+    # topic_numbers = [25, 50, 75, 100, 125, 150]
+    # mts = []
 
-    for n_topics in topic_numbers:
-        master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
+    # for n_topics in topic_numbers:
+    #     master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
+    #
+    #     score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
+    #     score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
+    #
+    #     topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
+    #     topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
+    #
+    #     y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda,
+    #                                          n_topics)
+    #     mt = ModelThreshold(y_probs_nmf, y_probs_lda,
+    #                         topic_dfs_nmf, topic_dfs_lda)
+    #     mt.confusion_terms(terms=['fpr', 'tpr', 'ppv', 'f1'])
+    #     mts.append(mt)
 
-        score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
-        score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
+    master_dfs_nmf, master_dfs_lda = get_master_dfs(n_topics, names_lists)
 
-        topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
-        topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
+    score_agg_dfs_nmf = get_grouby_by_dfs(master_dfs_nmf)
+    score_agg_dfs_lda = get_grouby_by_dfs(master_dfs_lda)
 
-        y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda,
-                                             n_topics)
-        mt = ModelThreshold(y_probs_nmf, y_probs_lda,
-                            topic_dfs_nmf, topic_dfs_lda)
-        mt.confusion_terms(terms=['fpr', 'tpr', 'ppv', 'f1'])
-        mts.append(mt)
+    topic_dfs_nmf = standardize_gb(score_agg_dfs_nmf, n_topics, names_lists)
+    topic_dfs_lda = standardize_gb(score_agg_dfs_lda, n_topics, names_lists)
 
+    plot_nmf_lda_diff(topic_dfs_nmf, topic_dfs_lda, names_lists, n_topics)
 
-    models = [('nmf', 'abc', n_topic),
-              ('nmf', 'gbc', n_topic),
-              ('nmf', 'rfc', n_topic),
-              ('lda', 'abc', n_topic),
-              ('lda', 'gbc', n_topic),
-              ('lda', 'rfc', n_topic),              ]
-    plt.style.use('ggplot')
-    fig = plt.figure(figsize=(8,8))
-    ax = fig.add_subplot(111)
-    plot_roc(mts, ax, models)
-
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    ax.set_title('ROC Curve of NMF and LDA models with %s topics' % n_topic)
-    plt.legend(loc='best')
-    plt.savefig('../images/%s_topics.png' % n_topic)
-    plt.close()
+    # y_probs_nmf, y_probs_lda = pred_prob(topic_dfs_nmf, topic_dfs_lda,
+                                        #  n_topics)
 
     print_time('Done', start)
