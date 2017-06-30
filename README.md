@@ -249,7 +249,7 @@ While not a deliverable product on its own, this study shows strong promise for 
 
     Beyond just expanding the amount of labeled data we could also expand the types of nuts in our studies. Perhaps we want to just find neo-nazis or people who likely commit domestic violence. Through more tedious searching (all of which must be done by hand) we could gather that information and proceed with the modeling.
 
-### Appendix
+## Appendix
 
 Below are interesting plots and word clouds. They are not pertinent to the modeling but can be worth a look for those interested.
 
@@ -279,7 +279,7 @@ Last warning, some racial slurs in this section.
 
 It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingely, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
 
-### Work Cited
+## Work Cited
 
 * [PRAW](https://praw.readthedocs.io/en/latest/)
 
