@@ -16,7 +16,7 @@ def get_wordclouds(body_arr, saveas=None):
     plt.figure()
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
-    plt.savefig('../images/wordclouds/lda/%s_topic.png' % saveas)
+    plt.savefig('../images/wordclouds/temp/%s_topic.png' % saveas)
     plt.close()
 
 def get_stop_words():

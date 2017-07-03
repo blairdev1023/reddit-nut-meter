@@ -1,9 +1,20 @@
 # Reddit Nut-Meter
 
+Blair Thurman
+
 ---
 Using NLP techniques and Machine Learning algorithms, this proof-of-concept project profiles extremists on Reddit.
 
 **Due to the nature of this study, some of this material could be offensive to some readers.**
+
+# Table of Contents
+
+1. [Data](#data)
+2. [Testing Model](#testing-model)
+    * [Cleaning](#cleaning)
+    * [Vectorizing](#vectorizing)
+    * [Topic Labeling](#topic-labeling)
+3. [Data](#data)
 
 ---
 
@@ -115,7 +126,7 @@ Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of
 
 Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
 
-### Topic Modeling
+### Topic Labeling
 
 In this section, we use two different matrix algorithms to discover the topics in each comment.
 
@@ -202,20 +213,15 @@ There are now 36 models to compare (2 topics models) x (3 predictive models) x (
 
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
-An analysis of the ROC curves follows afterwards.
+Only one ROC curve is shown but all of the ROC curves are in the Appendix for those who want to see the performance of other models.
 
-![25](images/25_topics.png)
 ![50](images/50_topics.png)
-![75](images/75_topics.png)
-![100](images/100_topics.png)
-![125](images/125_topics.png)
-![150](images/150_topics.png)
 
 Out of the 36 models shown, the best one was in the ROC curve for 50 topics. In that plot, the LDA Random Forest Classifier has a marker at 10% FPR and 90% TPR. Looking up this model in the ModelThreshold method 'show_class_report' we find that this particular model had a threshold of 55%. The way this model was chosen was by first prioritizing a minimum FPR and then maximizing our TPR. The logic surrounding this decision can be illustrated in an example.
 
-Let's say we are studying a population of 100 users, 10 of whom are nuts. What this chosen model does is identifies 9/10 of the nuts but also mislabels 9/90 non-nuts as nuts. So we end up with a supposed nut population of 18 users when in reality only half of those people are nuts. The size of the FPR problem is inversely proportional the percentage of nuts. So since the nuts are more sparse in everyday scenarios means that *any* FPR strongly dampers our predictive power.
+Suppose we are studying a population of 100 users, 10 of whom are nuts. What this chosen model does is identifies 9/10 of the nuts but also mislabels 9/90 non-nuts as nuts. So we end up with a supposed nut population of 18 users when in reality only half of those people are nuts. The size of the FPR problem is inversely proportional the percentage of nuts. So since the nuts are more sparse in everyday scenarios means that *any* FPR strongly dampers our predictive power.
 
-The obvious answer in response to this is why not just pick a 0% FPR model and deal with 40%-50% TPR instead? While that is tempting, it's difficult to defend that by testing on a set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That is how the model above was chosen.
+The obvious answer in response to this is why not just pick a model with an FPR of 0% and settle for 40%-50% TPR instead? While that is tempting, it's difficult to defend that by testing on a set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That is how the model above was chosen.
 
 Discussion of the Random Forest performance vs. the Boosting algorithms is discussed in the Appendix. Also in the Appendix are 6 more ROC curves that show how each topic/predictive model combo improved or regressed as the number of topics increased.
 
@@ -257,25 +263,76 @@ Below are interesting plots and word clouds. They are not pertinent to the model
 
 Last warning, some racial slurs in this section.
 
+In this study it was not necessary to understand what each topic 'meant'; the topics' usefulness came from their ability to differentiate the nut and non-nut populations. Yet the curious folks will want to know what kinds of things nuts discuss amongst themselves. A useful metric to help you get an idea of how good a topic is at differentiating the nuts is the standard distance between the means of the labeled nuts and non-nuts. The greater this distance (somewhere between -0.8 and 0.8) the better this particular topic is at helping a predictive model distinguish nuts.
 
+Each caption is as follows:
+
+Topic # (NMF/LDA) -Nut/Safe/Ambiguous "Inferred Topic" (Standard Mean Difference)
+
+
+![13](images/wordclouds/lda/13_topic.png)
+
+Topic \#13 (LDA) -Nut "Anti-Semitism/White Nationalism" (0.74)
+
+![15](images/wordclouds/lda/15_topic.png)
+
+Topic \#15 (LDA) -Nut "Wikipedia Sourcing" (0.62)
+
+![45](images/wordclouds/lda/45_topic.png)
+
+Topic \#45 (LDA) -Ambiguous "Conspiracy" (-0.16)
+
+![32](images/wordclouds/lda/32_topic.png)
+
+Topic \#32 (LDA) -Safe "How Was Your Day" (-0.78)
+
+![15](images/wordclouds/nmf/15_topic.png)
+
+Topic \#15 (NMF) -Nut "US Nationalism" (0.74)
+
+![27](images/wordclouds/nmf/27_topic.png)
+
+Topic \#27 (NMF) -Nut "Anti-Black Racism" (0.42)
+
+![35](images/wordclouds/nmf/35_topic.png)
+
+Topic \#35 (NMF) -Nut "US Politics" (0.62)
+
+![46](images/wordclouds/nmf/46_topic.png)
+
+Topic \#46 (NMF) -Nut "Women" (0.76)
+
+![20](images/wordclouds/nmf/20_topic.png)
+
+Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 
 **NMF Vs. LDA**
 
 ![25_topics](images/diff_nmf_lda_25.png)
-![25_topics](images/diff_nmf_lda_50.png)
-![25_topics](images/diff_nmf_lda_75.png)
-![25_topics](images/diff_nmf_lda_100.png)
-![25_topics](images/diff_nmf_lda_125.png)
-![25_topics](images/diff_nmf_lda_150.png)
+![50_topics](images/diff_nmf_lda_50.png)
+![75_topics](images/diff_nmf_lda_75.png)
+![100_topics](images/diff_nmf_lda_100.png)
+![125_topics](images/diff_nmf_lda_125.png)
+![150_topics](images/diff_nmf_lda_150.png)
 
-**ROC Curves over number of topics**
+**ROC Curves by Number of Topics over Models**
+
+![25](images/25_topics.png)
+![50](images/50_topics.png)
+![75](images/75_topics.png)
+![100](images/100_topics.png)
+![125](images/125_topics.png)
+![150](images/150_topics.png)
+
+
+**ROC Curves by Model over Number of Topics**
 
 ![nmf_abc](images/nmf_abc_all_topics.png)
-![nmf_abc](images/nmf_gbc_all_topics.png)
-![nmf_abc](images/nmf_rfc_all_topics.png)
-![nmf_abc](images/lda_abc_all_topics.png)
-![nmf_abc](images/lda_gbc_all_topics.png)
-![nmf_abc](images/lda_rfc_all_topics.png)
+![nmf_gbc](images/nmf_gbc_all_topics.png)
+![nmf_rfc](images/nmf_rfc_all_topics.png)
+![lda_abc](images/lda_abc_all_topics.png)
+![lda_gbc](images/lda_gbc_all_topics.png)
+![lda_rfc](images/lda_rfc_all_topics.png)
 
 It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingely, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
 
