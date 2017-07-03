@@ -11,7 +11,7 @@ Using NLP techniques and Machine Learning algorithms, this proof-of-concept proj
 
 1. [Introduction](#introduction)
 2. [Data](#data)
-3. [Topic Modeling](#testing-model)
+3. [Topic Modeling](#topic-modeling)
     * [Cleaning](#cleaning)
     * [Vectorizing](#vectorizing)
     * [Topic Labeling](#topic-labeling)
@@ -22,8 +22,8 @@ Using NLP techniques and Machine Learning algorithms, this proof-of-concept proj
 5. [Expansion](#expansion)
 6. [Appendix](#appendix)
     * [Word Clouds](#word-clouds)
-    * [NMF Vs. LDA](#nmf-vs.-lda)
-    * [ROC Curves by Number of Topics](#roc-curves-by-number of topics)
+    * [NMF Vs. LDA](#nmf-vs-lda)
+    * [ROC Curves by Number of Topics](#roc-curves-by-number-of-topics)
     * [ROC Curves by Model](#roc-curves-by-model)
 7. [Work Cited](#work-cited)
 
@@ -181,7 +181,7 @@ LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm b
 
 Now that each comment is a number, and each user is represented as a collection of numbers, we can start training, testing, and evaluating our models.
 
-**Heuristic Development**
+### Heuristic Development
 
 Since we are interested in predicting whether or not a user is a nut, we need  to transform each user's collection of topic numbers into a numeric expression that can be fed into a model. To do this, we first aggregate the comment count per topic for each user into a vector.
 
@@ -218,7 +218,7 @@ Given that each topic number on its own is a weak classifier (no single topic ac
 
 You can find the entire plot in the Appendix. Along with ones for other numbers of topics.
 
-**Model Evaluation**
+### Model Evaluation
 
 There are now 36 models to compare (2 topics models) x (3 predictive models) x (6 number of topics).
 
@@ -285,33 +285,49 @@ Topic # (NMF/LDA) -Nut/Safe/Ambiguous "Inferred Topic" (Standard Mean Difference
 
 Topic \#13 (LDA) -Nut "Anti-Semitism/White Nationalism" (0.74)
 
+---
+
 ![15](images/wordclouds/lda/15_topic.png)
 
 Topic \#15 (LDA) -Nut "Wikipedia Sourcing" (0.62)
+
+---
 
 ![45](images/wordclouds/lda/45_topic.png)
 
 Topic \#45 (LDA) -Ambiguous "Conspiracy" (-0.16)
 
+---
+
 ![32](images/wordclouds/lda/32_topic.png)
 
 Topic \#32 (LDA) -Safe "How Was Your Day" (-0.78)
+
+---
 
 ![15](images/wordclouds/nmf/15_topic.png)
 
 Topic \#15 (NMF) -Nut "US Nationalism" (0.74)
 
+---
+
 ![27](images/wordclouds/nmf/27_topic.png)
 
 Topic \#27 (NMF) -Nut "Anti-Black Racism" (0.42)
+
+---
 
 ![35](images/wordclouds/nmf/35_topic.png)
 
 Topic \#35 (NMF) -Nut "US Politics" (0.62)
 
+---
+
 ![46](images/wordclouds/nmf/46_topic.png)
 
 Topic \#46 (NMF) -Nut "Women" (0.76)
+
+---
 
 ![20](images/wordclouds/nmf/20_topic.png)
 
