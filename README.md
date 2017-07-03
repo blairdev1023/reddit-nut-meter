@@ -333,7 +333,7 @@ Topic \#46 (NMF) -Nut "Women" (0.76)
 
 Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 
-#### NMF Vs. LDA
+#### NMF Vs LDA
 
 ![25_topics](images/diff_nmf_lda_25.png)
 ![50_topics](images/diff_nmf_lda_50.png)
