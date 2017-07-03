@@ -134,6 +134,7 @@ Looking at the words left over we can still make sense what each sentence is dis
 Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tf-Idf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
 
 ![Idf](images/idf.jpg)
+[Work Cited](#work-cited)
 
 Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
 
@@ -146,6 +147,7 @@ In this section, we use two different matrix algorithms to discover the topics i
 NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix. The matrix of interest would be the one from our Tf-Idf vectorizer.
 
 ![NMF](images/NMF.png)
+[Work Cited](#work-cited)
 
 The reasoning behind this is that if we originally had N comments and M words in our vectorizer matrix we could break it down into an N x k and k x M matrices. What does the number k represent? K is a hyperparameter in NMF which decides he number of latent topics used in the decomposition of the vectorizer matrix. Then, setting W as the ouptut from our NMF, we have a new matrix which represents the importance of topics to each comment.
 
@@ -173,7 +175,7 @@ LDA, or Latent Dirichlet Allocation, is another matrix decomposition algorithm b
 
 * There were 6 topic models each for both LDA and NMF that were trained. Each one having a different number of topics ranging from 25 to 150 in increments of 25.
 
-* There are a few word clouds of topic numbers included in the Appendix. Again, some language could be offensive to some readers.
+* There are a few word clouds of topic numbers included in the [Appendix](#word-clouds). Again, some language could be offensive to some readers.
 
 ---
 
@@ -216,7 +218,7 @@ To get a better idea of the differentiation of users provided by NMF and LDA, we
 
 Given that each topic number on its own is a weak classifier (no single topic across all NMF & LDA models was able to break one standard deviation of difference), this looked like a natural problem for a Boosting model. It was expected that either the Adaptive Boost or Gradient Boost would edge out the other and the Random Forest Classifier was included to see how the Boosting techniques compare to 'vanilla' Machine Learning algorithms.
 
-You can find the entire plot in the Appendix. Along with ones for other numbers of topics.
+You can find the entire plot in the [Appendix](#nmf-vs-lda). Along with ones for other numbers of topics.
 
 ### Model Evaluation
 
@@ -224,7 +226,7 @@ There are now 36 models to compare (2 topics models) x (3 predictive models) x (
 
 Below are ROC curves which compare the three predictive models for NMF against the three predictive models for LDA on a set number of topics. On an ROC curve, we plot the model's false positive rate (FPR) against its true positive rate (TPR). Those can be interpreted as the rate of which I'm wrong when I label someone a non-nut and the rate of which I'm right when I label someone a nut, respectively. Each point on the plot represents a different threshold that was used to label predictions as nut and non-nut.
 
-Only one ROC curve is shown but all of the ROC curves are in the Appendix for those who want to see the performance of other models.
+Only one ROC curve is shown but all of the ROC curves are in the [Appendix](roc-curves-by-number-of-topics) for those who want to see the performance of other models.
 
 ![50](images/50_topics.png)
 
@@ -234,7 +236,7 @@ Suppose we are studying a population of 100 users, 10 of whom are nuts. What thi
 
 The obvious answer in response to this is why not just pick a model with an FPR of 0% and settle for 40%-50% TPR instead? While that is tempting, it's difficult to defend that by testing on a set of 20 users, my model won't mislabel a single non-nut as a nut. There will always be some error going forward so we pick the minimum FPR value of 10%. After setting the maximum allowed FPR, we then pick the model with the highest TPR. That is how the model above was chosen.
 
-Discussion of the Random Forest performance vs. the Boosting algorithms is discussed in the Appendix. Also in the Appendix are 6 more ROC curves that show how each topic/predictive model combo improved or regressed as the number of topics increased.
+Discussion of the Random Forest performance vs. the Boosting algorithms is discussed in the Appendix. Also in the [Appendix]((#roc-curves-by-model)) are 6 more ROC curves that show how each topic/predictive model combo improved or regressed as the number of topics increased.
 
 ## Expansion
 
@@ -333,7 +335,11 @@ Topic \#46 (NMF) -Nut "Women" (0.76)
 
 Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 
+---
+
 #### NMF Vs LDA
+
+Standard difference between the means of the nuts and non-nuts by topic.
 
 ![25_topics](images/diff_nmf_lda_25.png)
 ![50_topics](images/diff_nmf_lda_50.png)
@@ -342,7 +348,11 @@ Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 ![125_topics](images/diff_nmf_lda_125.png)
 ![150_topics](images/diff_nmf_lda_150.png)
 
+---
+
 #### ROC Curves by Number of Topics
+
+ROC curves of the models over different numbers of topics.
 
 ![25](images/25_topics.png)
 ![50](images/50_topics.png)
@@ -353,6 +363,8 @@ Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 
 
 #### ROC Curves by Model
+
+ROC curves of each topic/predictive model combination.
 
 ![nmf_abc](images/nmf_abc_all_topics.png)
 ![nmf_gbc](images/nmf_gbc_all_topics.png)
