@@ -9,14 +9,25 @@ Using NLP techniques and Machine Learning algorithms, this proof-of-concept proj
 
 # Table of Contents
 
-1. [Data](#data)
-2. [Testing Model](#testing-model)
+1. [Introduction](#introduction)
+2. [Data](#data)
+3. [Topic Modeling](#testing-model)
     * [Cleaning](#cleaning)
     * [Vectorizing](#vectorizing)
     * [Topic Labeling](#topic-labeling)
-3. [Data](#data)
+4. [Predictive Modeling](#predictive-modeling)
+    * [Heuristic Development](#heuristic-development)
+    * [Modeling](#modeling)
+    * [Model Evaluation](#model-evaluation)
+5. [Expansion](#expansion)
+6. [Appendix](#appendix)
+    * [Word Clouds](#word-clouds)
+    * [NMF Vs. LDA](#nmf-vs.-lda)
+    * [ROC Curves by Number of Topics](#roc-curves-by-number of topics)
+    * [ROC Curves by Model](#roc-curves-by-model)
+7. [Work Cited](#work-cited)
 
----
+## Introduction
 
 Reddit.com is an online forum where users can discuss whichever topics they wish in small groups called 'subreddits.' A popular website, 4th largest in the [United States](http://www.alexa.com/topsites/countries/US), that has been plagued by [radical groups](https://www.washingtonpost.com/news/the-intersect/wp/2015/06/10/these-are-the-5-subreddits-reddit-banned-under-its-game-changing-anti-harassment-policy-and-why-it-banned-them/) over its lifetime. Lately you can see how [certain subreddits](https://www.reddit.com/r/uncensorednews/comments/6eewxz/migrants_caught_stealing_flowers_soft_toys_from/) have been responding to recent events in global politics. Beyond a security standpoint, there is motivation to profile these people for the sake of other users on Reddit. I don't like discussing politics with Neo-Nazis. If someone supports domestic abuse, I don't want their opinion on PC parts. So anyone who is a 'nut' is someone I'd like to avoid on this website.
 
@@ -259,7 +270,7 @@ While not a deliverable product on its own, this study shows strong promise for 
 
 Below are interesting plots and word clouds. They are not pertinent to the modeling but can be worth a look for those interested.
 
-**Word Clouds**
+#### Word Clouds
 
 Last warning, some racial slurs in this section.
 
@@ -306,7 +317,7 @@ Topic \#46 (NMF) -Nut "Women" (0.76)
 
 Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 
-**NMF Vs. LDA**
+#### NMF Vs. LDA
 
 ![25_topics](images/diff_nmf_lda_25.png)
 ![50_topics](images/diff_nmf_lda_50.png)
@@ -315,7 +326,7 @@ Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 ![125_topics](images/diff_nmf_lda_125.png)
 ![150_topics](images/diff_nmf_lda_150.png)
 
-**ROC Curves by Number of Topics over Models**
+#### ROC Curves by Number of Topics
 
 ![25](images/25_topics.png)
 ![50](images/50_topics.png)
@@ -325,7 +336,7 @@ Topic \#20 (NMF) -Ambiguous "Waffles" (-0.20)
 ![150](images/150_topics.png)
 
 
-**ROC Curves by Model over Number of Topics**
+#### ROC Curves by Model
 
 ![nmf_abc](images/nmf_abc_all_topics.png)
 ![nmf_gbc](images/nmf_gbc_all_topics.png)
