@@ -325,7 +325,7 @@ Topic \#35 (NMF) -Nut "US Politics" (0.62)
 
 ---
 
-![46](images/wordclouds/nmf/46_topic.png)
+![46](images/wordclouds/nmf/46_topic.png) 
 
 Topic \#46 (NMF) -Nut "Women" (0.76)
 
