@@ -19,7 +19,16 @@ def z_score(observation, mean, std):
     Calculates the z-score associated with the observation value given a
     normal distribution of a known mean and standard deviation
 
-    Returns: z_score
+    PARAMETERS:
+    observation - float/int
+        value to be standardized
+    mean - float/int
+        known sample mean
+    std - float/int
+        known sample standard deviation
+
+    RETURNS: 
+    z_score - float
     '''
     return (observation - mean) / std
 
