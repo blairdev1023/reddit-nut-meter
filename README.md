@@ -373,7 +373,7 @@ ROC curves of each topic/predictive model combination.
 ![lda_gbc](images/lda_gbc_all_topics.png)
 ![lda_rfc](images/lda_rfc_all_topics.png)
 
-It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingely, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
+It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingly, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
 
 ## Work Cited
 
