@@ -25,7 +25,7 @@ Using NLP techniques and Machine Learning algorithms, this proof-of-concept proj
     * [NMF Vs. LDA](#nmf-vs-lda)
     * [ROC Curves by Number of Topics](#roc-curves-by-number-of-topics)
     * [ROC Curves by Model](#roc-curves-by-model)
-7. [Work Cited](#work-cited)
+7. [References](#references)
 
 ## Introduction
 
@@ -134,7 +134,7 @@ Looking at the words left over we can still make sense what each sentence is dis
 Tf-Idf (Term frequency-Inverse document frequency) accomplishes the same goal of quantizing importance of words to documents but in a different fashion. Firstly, notice the 'Tf' part of 'Tf-Idf'. This part of the transformation does exactly what the Count Vectorizer does. The 'Idf' part is how the Tf-Idf Vectorizer distinguishes itself. The Idf value for each j-th element in the Tf matrix is expressed as:
 
 ![Idf](images/idf.jpg)
-[Work Cited](#work-cited)
+[References](#references)
 
 Each value in the Tf matrix is multiplied by its Idf value. This rewards uniqueness and penalizes words that appear in multiple documents but aren't included as stop words.
 
@@ -147,7 +147,7 @@ In this section, we use two different matrix algorithms to discover the topics i
 NMF, or Non-negative Matrix Factorization, is a way to break a single matrix into two different matricies which when multiplied together are approximately the orginal matrix. The matrix of interest would be the one from our Tf-Idf vectorizer.
 
 ![NMF](images/NMF.png)
-[Work Cited](#work-cited)
+[References](#references)
 
 The reasoning behind this is that if we originally had N comments and M words in our vectorizer matrix we could break it down into an N x k and k x M matrices. What does the number k represent? K is a hyperparameter in NMF which decides he number of latent topics used in the decomposition of the vectorizer matrix. Then, setting W as the ouptut from our NMF, we have a new matrix which represents the importance of topics to each comment.
 
@@ -375,7 +375,7 @@ ROC curves of each topic/predictive model combination.
 
 It was surprising in the final analysis of this project to find that the Random Forest Classifier had beaten both boosting models. Of the three different predictive models used, the Adaptive Boost Classifier was consistently the worst performer. Assumingly, the low number of data points was the main contributor to this phenomenon. If more labeled users were added to the predictive models then our TPR and FPR rate could become more granular. At that point the boosting algorithms would be able to utilize that data and eventually supersede the RFC along with greater margins for TPF/FPR to tell models apart from one another.
 
-## Work Cited
+## References
 
 * [PRAW](https://praw.readthedocs.io/en/latest/)
 
@@ -386,3 +386,13 @@ It was surprising in the final analysis of this project to find that the Random 
 * [NMF Diagram](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization)
 
 * [Word Clouds](https://github.com/amueller/word_cloud)
+
+* Tech Stack
+   * Python
+   * Ipython
+   * PRAW
+   * Numpy
+   * Pandas
+   * Sci-Kit Learn
+   * NLTK
+   * Matplotlib
